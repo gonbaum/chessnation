@@ -1,0 +1,46 @@
+.gradle
+.gradle-home
+.container-gradle-cache/
+.container-gradle-home/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+application.yml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# GYG
+.gygdev-dc.yml
+Dockerfile.web
+.app.*
+
+hs_err_pid*.log
+application.yml
+
+# OS
+.DS_Store
