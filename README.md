@@ -6,6 +6,5 @@ It connects to lichess to keep the game running there (this dependency could be 
 
 Next tasks:
 
-- drop dependency on lichess and use e.g. https://github.com/ruilisi/react-chessground
-- create WebSocket's and enable UI to connect to it (e.g. https://github.com/ornicar/chessground)
+- create UI (e.g. https://github.com/ornicar/chessground)
 - start working on integrating video
