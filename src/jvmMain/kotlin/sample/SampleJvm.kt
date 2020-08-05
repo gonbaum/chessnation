@@ -4,21 +4,34 @@ import com.github.bhlangonijr.chesslib.Board
 import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import io.ktor.application.install
 import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
+import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.delay
 
 fun main() {
+    val channels = HashSet<SendChannel<Frame>>()
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
         install(WebSockets) {}
         routing {
             webSocket("/ws") {
-                outgoing.send(Frame.Text("hello"))
-                playGame { outgoing.send(Frame.Text(it)) }
+                channels.add(outgoing)
+                for (frame in incoming) {
+                    when (frame) {
+                        is Frame.Text -> {
+                            val text = frame.readText()
+                            println("Received on WS: $text")
+                            val filter = channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
+                        }
+                    }
+                }
+//                outgoing.send(Frame.Text("hello"))
+//                playGame { outgoing.send(Frame.Text(it)) }
             }
             get("/") {
                 println("hello")

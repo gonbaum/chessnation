@@ -34,6 +34,7 @@
     var $pgn = $('#pgn')
 
     function onDragStart(source, piece, position, orientation) {
+        if (!myTurn) return false;
         // do not pick up pieces if the game is over
         if (game.game_over()) return false
 
@@ -56,6 +57,8 @@
         if (move === null) return 'snapback'
 
         updateStatus()
+        myTurn = false;
+        socket.send(source + target)
     }
 
     // update the board position after the piece snap
@@ -109,6 +112,7 @@
 
     updateStatus()
 
+    let myTurn = true;
     let socket = new WebSocket("ws://127.0.0.1:8080/ws");
 
     socket.onopen = function (e) {
@@ -127,6 +131,7 @@
         board.position(game.fen())
 
         updateStatus()
+        myTurn = true;
     };
 
 </script>
