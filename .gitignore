@@ -1,3 +1,4 @@
+.env
 .gradle
 .gradle-home
 .container-gradle-cache/

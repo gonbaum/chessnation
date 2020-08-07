@@ -2,11 +2,14 @@ package sample
 
 import com.github.bhlangonijr.chesslib.Board
 import com.github.bhlangonijr.chesslib.move.MoveGenerator
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.file
+import io.ktor.http.content.files
 import io.ktor.http.content.static
+import io.ktor.response.respondRedirect
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -22,6 +25,7 @@ fun main() {
         install(WebSockets) {}
         routing {
             static("static") {
+                files("pieces")
                 file("index.html")
             }
             webSocket("/ws") {
@@ -40,6 +44,7 @@ fun main() {
             }
             get("/") {
                 println("hello")
+                call.respondRedirect("/static/index.html", permanent = true)
             }
         }
     }.start(wait = true)

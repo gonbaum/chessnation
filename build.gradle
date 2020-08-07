@@ -31,6 +31,6 @@ apply plugin: 'kotlin'
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'io.ktor.server.netty.EngineMain'
+        attributes 'Main-Class': 'sample.SampleJvmKt'
     }
 }
