@@ -5,6 +5,8 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import io.ktor.application.install
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.readText
+import io.ktor.http.content.file
+import io.ktor.http.content.static
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -16,9 +18,12 @@ import kotlinx.coroutines.delay
 
 fun main() {
     val channels = HashSet<SendChannel<Frame>>()
-    embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
+    embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080, host = "127.0.0.1") {
         install(WebSockets) {}
         routing {
+            static("static") {
+                file("index.html")
+            }
             webSocket("/ws") {
                 channels.add(outgoing)
                 for (frame in incoming) {

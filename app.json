@@ -1,0 +1,5 @@
+{
+  "name": "video-chess",
+  "description": "Kotlin app for chess with video.",
+  "image": "heroku/java"
+}

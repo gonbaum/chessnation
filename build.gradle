@@ -28,3 +28,9 @@ dependencies {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'kotlin'
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'io.ktor.server.netty.EngineMain'
+    }
+}
