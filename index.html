@@ -17,6 +17,8 @@
 <div id="fen"></div>
 <label>PGN:</label>
 <div id="pgn"></div>
+<div id="meet"></div>
+<label>Video</label>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
@@ -25,6 +27,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"
         integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz"
         crossorigin="anonymous"></script>
+<script src='https://meet.jit.si/external_api.js'></script>
 <script>
 
     var board = null
@@ -134,6 +137,18 @@
         myTurn = true;
     };
 
+    // setup video
+    const domain = 'meet.jit.si';
+    const options = {
+        roomName: 'JitsiVideoChess',
+        width: 700,
+        height: 700,
+        parentNode: document.querySelector('#meet')
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
+    api.addEventListener('cameraError', function (event) {
+        console.log('VC Camera error ' + event)
+    });
 </script>
 </body>
 </html>
