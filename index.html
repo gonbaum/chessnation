@@ -49,6 +49,13 @@
         }
     }
 
+    function getPromotionPiece(move) {
+        if (move.piece === 'p' &&
+            ((game.turn() === 'b' && move.to[1] === '8') || (game.turn() === 'w' && move.to[1] === '1')))
+            return 'q';
+        return '';
+    }
+
     function onDrop(source, target) {
         // see if the move is legal
         var move = game.move({
@@ -61,7 +68,7 @@
         if (move === null) return 'snapback'
 
         updateStatus()
-        socket.send(source + target)
+        socket.send(source + target + getPromotionPiece(move))
     }
 
     // update the board position after the piece snap
@@ -90,7 +97,7 @@
 
         // game still on
         else {
-            status = 'You play ' + myColor + ', ' +moveColor + ' to move'
+            status = 'You play ' + myColor + ', ' + moveColor + ' to move'
 
             // check?
             if (game.in_check()) {
