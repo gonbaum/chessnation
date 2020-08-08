@@ -35,11 +35,12 @@
     var $status = $('#status')
     var $fen = $('#fen')
     var $pgn = $('#pgn')
+    let myColor;
+    let gameStarted = false;
 
     function onDragStart(source, piece, position, orientation) {
-        if (!myTurn) return false;
-        // do not pick up pieces if the game is over
-        if (game.game_over()) return false
+        if (!gameStarted || game.turn() !== myColor || game.game_over())
+            return false;
 
         // only pick up pieces for the side to move
         if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
@@ -60,7 +61,6 @@
         if (move === null) return 'snapback'
 
         updateStatus()
-        myTurn = false;
         socket.send(source + target)
     }
 
@@ -90,7 +90,7 @@
 
         // game still on
         else {
-            status = moveColor + ' to move'
+            status = 'You play ' + myColor + ', ' +moveColor + ' to move'
 
             // check?
             if (game.in_check()) {
@@ -115,7 +115,6 @@
 
     updateStatus()
 
-    let myTurn = true;
     let socket = new WebSocket("ws://127.0.0.1:8080/ws");
 
     socket.onopen = function (e) {
@@ -126,15 +125,20 @@
         const received = event.data;
         console.log(received)
 
-        game.move({
-            from: received.substring(0, 2),
-            to: received.substring(2, 4),
-            promotion: 'q' // NOTE: always promote to a queen for example simplicity
-        });
-        board.position(game.fen())
+        if (received === "start")
+            gameStarted = true;
+        else if (received === "w" || received === "b")
+            myColor = received
+        else {
+            game.move({
+                from: received.substring(0, 2),
+                to: received.substring(2, 4),
+                promotion: 'q' // NOTE: always promote to a queen for example simplicity
+            });
+            board.position(game.fen())
+        }
 
         updateStatus()
-        myTurn = true;
     };
 
     // setup video

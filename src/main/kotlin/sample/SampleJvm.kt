@@ -5,6 +5,7 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.file
@@ -40,12 +41,16 @@ fun Application.module() {
         }
         webSocket("/ws") {
             channels.add(outgoing)
+            if (channels.size > 1) {
+                log.info("Channels count ${channels.size}")
+                sendStartGameSequence()
+            }
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
                         val text = frame.readText()
-                        println("Received on WS: $text")
-                        val filter = channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
+                        log.info("Received on web socket: $text")
+                        channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
                     }
                 }
             }
@@ -53,10 +58,15 @@ fun Application.module() {
 //                playGame { outgoing.send(Frame.Text(it)) }
         }
         get("/") {
-            println("hello")
             call.respondRedirect("/static/index.html", permanent = true)
         }
     }
+}
+
+private suspend fun sendStartGameSequence() {
+    listOf("w", "b").shuffled().zip(channels)
+        .forEach { it.second.send(Frame.Text(it.first)) }
+    channels.forEach { it.send(Frame.Text("start")) }
 }
 
 suspend fun playGame(send: suspend (String) -> Unit): String {
