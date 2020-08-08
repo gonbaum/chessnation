@@ -1,4 +1,4 @@
-package sample
+package video_chess
 
 import com.github.bhlangonijr.chesslib.*
 import com.github.bhlangonijr.chesslib.move.Move
