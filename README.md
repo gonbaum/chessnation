@@ -7,7 +7,6 @@ It connects to lichess to keep the game running there (this dependency could be 
 Next tasks:
 
 - keep status of the game on backend
+- do not allow play before there are at least 2 players
 - make the `my turn` logic smarter - backend should notify whose turn it is
-- enable multiple games at the same time (e.g. keep pairs of channels together)
-- deploy the application
-- start working on integrating video
+- enable multiple games/videos at the same time (e.g. keep lists of channels together)
