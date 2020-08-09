@@ -56,7 +56,5 @@ fun Application.module() {
 }
 
 private suspend fun sendStartGameSequence() {
-    listOf("w", "b").shuffled().zip(channels)
-        .forEach { it.second.send(Frame.Text(it.first)) }
     channels.forEach { it.send(Frame.Text("start")) }
 }

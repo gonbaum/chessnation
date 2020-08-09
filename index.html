@@ -10,6 +10,9 @@
 </head>
 <body>
 
+<div id="colorSelection"></div>
+<button onclick="selectWhite()">Play as white</button>
+<button onclick="selectBlack()">Play as black</button>
 <div id="myBoard" style="width: 400px"></div>
 <label>Status:</label>
 <div id="status"></div>
@@ -134,8 +137,6 @@
 
         if (received === "start")
             gameStarted = true;
-        else if (received === "w" || received === "b")
-            myColor = received
         else {
             game.move({
                 from: received.substring(0, 2),
@@ -160,6 +161,16 @@
     api.addEventListener('cameraError', function (event) {
         console.log('VC Camera error ' + event)
     });
+
+    function selectWhite() {
+        myColor = 'w';
+        updateStatus();
+    }
+
+    function selectBlack() {
+        myColor = 'b';
+        updateStatus();
+    }
 </script>
 </body>
 </html>
