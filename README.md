@@ -6,6 +6,6 @@ It connects to lichess to keep the game running there (this dependency could be 
 
 Next tasks:
 
+- fix connection of the clients to WebSocket - maybe assign the color immediately when the client joins
 - simplify UI of video
-- keep status of the game on backend
 - enable multiple games/videos at the same time (e.g. keep lists of channels together)
