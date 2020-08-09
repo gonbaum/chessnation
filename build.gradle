@@ -33,6 +33,6 @@ apply plugin: 'kotlin'
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'sample.SampleJvmKt'
+        attributes 'Main-Class': 'video_chess.ServerKt'
     }
 }
