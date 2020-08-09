@@ -125,7 +125,8 @@
 
     updateStatus()
 
-    let socket = new WebSocket("ws://127.0.0.1:8080/ws");
+    let host = location.origin.replace(/^http/, 'ws')
+    let socket = new WebSocket(host + "/ws");
 
     socket.onopen = function (e) {
         console.log("[open] Connection established")
