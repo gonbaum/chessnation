@@ -47,7 +47,7 @@ fun Application.module() {
                             boardHandler.updateBoard(text)
                         }
                         channels.removeIf { it.isClosedForSend }
-                        channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
+                        channels.forEach { it.send(Frame.Text(text)) }
                     }
                 }
             }
