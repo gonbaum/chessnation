@@ -9,13 +9,14 @@ import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.websocket.WebSockets
-import io.ktor.websocket.webSocket
+import io.ktor.websocket.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 
 val channels = HashSet<SendChannel<Frame>>()
 val boardHandler = BoardHandler()
 
+@ExperimentalCoroutinesApi
 fun main() {
     val port = System.getenv("PORT")?.toInt() ?: 8080
     embeddedServer(
@@ -25,6 +26,7 @@ fun main() {
     ).start()
 }
 
+@ExperimentalCoroutinesApi // because of isClosedForSend from SendChannel
 fun Application.module() {
     install(WebSockets) {}
     install(Routing) {
@@ -34,17 +36,18 @@ fun Application.module() {
         }
         webSocket("/ws") {
             channels.add(outgoing)
-            if (channels.size > 1) {
-                log.info("Channels count ${channels.size}")
-                sendStartGameSequence()
-            }
+            outgoing.send(Frame.Text("fen|${boardHandler.getFen()}"))
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
                         val text = frame.readText()
                         log.info("Received on web socket: $text")
                         boardHandler.updateBoard(text)
-                        channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
+                        channels.removeIf {
+                            log.info("cleaning up a channel...")
+                            it.isClosedForSend
+                        }
+                        channels.forEach { it.send(Frame.Text(text)) }
                     }
                 }
             }
@@ -55,6 +58,3 @@ fun Application.module() {
     }
 }
 
-private suspend fun sendStartGameSequence() {
-    channels.forEach { it.send(Frame.Text("start")) }
-}

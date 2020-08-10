@@ -9,7 +9,7 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator
 import kotlinx.coroutines.delay
 
 class BoardHandler {
-    val board = Board()
+    private val board = Board()
 
     fun updateBoard(text: String) {
         when (text.length) {
@@ -29,6 +29,8 @@ class BoardHandler {
             else -> throw IllegalArgumentException("Incorrect move received: $text")
         }
     }
+
+    fun getFen(): String = board.fen
 
     suspend fun playGame(send: suspend (String) -> Unit): String {
         val board = Board()

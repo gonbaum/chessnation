@@ -17,6 +17,6 @@ class BoardHandlerTests {
         boardHandler.updateBoard("e8e7")
         boardHandler.updateBoard("f7g8Q")
 
-        assertEquals("rnbq1bQr/ppppk2p/4p1p1/8/8/8/PPPP1PPP/RNBQKBNR b KQ - 0 5", boardHandler.board.fen)
+        assertEquals("rnbq1bQr/ppppk2p/4p1p1/8/8/8/PPPP1PPP/RNBQKBNR b KQ - 0 5", boardHandler.getFen())
     }
 }

@@ -39,10 +39,9 @@
     var $fen = $('#fen')
     var $pgn = $('#pgn')
     let myColor;
-    let gameStarted = false;
 
     function onDragStart(source, piece, position, orientation) {
-        if (!gameStarted || game.turn() !== myColor || game.game_over())
+        if (game.turn() !== myColor || game.game_over())
             return false;
 
         // only pick up pieces for the side to move
@@ -136,8 +135,11 @@
         const received = event.data;
         console.log(received)
 
-        if (received === "start")
-            gameStarted = true;
+        if (received.startsWith("fen")) {
+            const fen = received.split("|")[1]
+            board.position(fen)
+            game.load(fen)
+        }
         else {
             game.move({
                 from: received.substring(0, 2),
