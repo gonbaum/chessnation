@@ -19,4 +19,13 @@ class BoardHandlerTests {
 
         assertEquals("rnbq1bQr/ppppk2p/4p1p1/8/8/8/PPPP1PPP/RNBQKBNR b KQ - 0 5", boardHandler.getFen())
     }
+
+    @Test
+    fun `supports resetting the board`() {
+        val boardHandler = BoardHandler()
+        boardHandler.updateBoard("e2e4")
+        boardHandler.resetBoard()
+
+        assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", boardHandler.getFen())
+    }
 }

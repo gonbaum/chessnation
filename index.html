@@ -22,6 +22,7 @@
 <div id="pgn"></div>
 <div id="meet"></div>
 <label>Video</label>
+<button onclick="sendResetBoardCommand()">Reset board</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
@@ -133,12 +134,14 @@
 
     socket.onmessage = function (event) {
         const received = event.data;
-        console.log(received)
 
         if (received.startsWith("fen")) {
-            const fen = received.split("|")[1]
-            board.position(fen)
-            game.load(fen)
+            const fen = received.split("|")[1];
+            game.load(fen);
+        }
+        else if (received === "reset") {
+            let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            game.load(startingFen);
         }
         else {
             game.move({
@@ -146,9 +149,9 @@
                 to: received.substring(2, 4),
                 promotion: 'q' // NOTE: always promote to a queen for example simplicity
             });
-            board.position(game.fen())
         }
 
+        board.position(game.fen())
         updateStatus()
     };
 
@@ -173,6 +176,10 @@
     function selectBlack() {
         myColor = 'b';
         updateStatus();
+    }
+
+    function sendResetBoardCommand() {
+        socket.send("reset")
     }
 </script>
 </body>

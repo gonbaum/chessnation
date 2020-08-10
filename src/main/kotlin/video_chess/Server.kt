@@ -35,19 +35,19 @@ fun Application.module() {
             file("index.html")
         }
         webSocket("/ws") {
-            channels.add(outgoing)
-            outgoing.send(Frame.Text("fen|${boardHandler.getFen()}"))
+            handleNewClient()
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
                         val text = frame.readText()
                         log.info("Received on web socket: $text")
-                        boardHandler.updateBoard(text)
-                        channels.removeIf {
-                            log.info("cleaning up a channel...")
-                            it.isClosedForSend
+                        if (text == "reset") {
+                            boardHandler.resetBoard()
+                        } else {
+                            boardHandler.updateBoard(text)
                         }
-                        channels.forEach { it.send(Frame.Text(text)) }
+                        channels.removeIf { it.isClosedForSend }
+                        channels.filter { it != outgoing }.forEach { it.send(Frame.Text(text)) }
                     }
                 }
             }
@@ -56,5 +56,10 @@ fun Application.module() {
             call.respondRedirect("/static/index.html", permanent = true)
         }
     }
+}
+
+private suspend fun DefaultWebSocketServerSession.handleNewClient() {
+    channels.add(outgoing)
+    outgoing.send(Frame.Text("fen|${boardHandler.getFen()}"))
 }
 
