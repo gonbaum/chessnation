@@ -138,12 +138,10 @@
         if (received.startsWith("fen")) {
             const fen = received.split("|")[1];
             game.load(fen);
-        }
-        else if (received === "reset") {
+        } else if (received === "reset") {
             let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             game.load(startingFen);
-        }
-        else {
+        } else {
             game.move({
                 from: received.substring(0, 2),
                 to: received.substring(2, 4),
@@ -161,7 +159,15 @@
         roomName: 'JitsiVideoChess',
         width: 700,
         height: 700,
-        parentNode: document.querySelector('#meet')
+        parentNode: document.querySelector('#meet'),
+        interfaceConfigOverwrite: {
+            TOOLBAR_BUTTONS: [
+                'microphone', 'camera', 'desktop', 'embedmeeting',
+                'fodeviceselection', 'hangup', 'profile', 'chat',
+                'livestreaming', 'etherpad', 'settings',
+                'videobackgroundblur', 'help', 'security'
+            ]
+        }
     };
     const api = new JitsiMeetExternalAPI(domain, options);
     api.addEventListener('cameraError', function (event) {
