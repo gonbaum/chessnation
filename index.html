@@ -171,11 +171,13 @@
     function selectWhite() {
         myColor = 'w';
         updateStatus();
+        board.orientation('white');
     }
 
     function selectBlack() {
         myColor = 'b';
         updateStatus();
+        board.orientation('black');
     }
 
     function sendResetBoardCommand() {
