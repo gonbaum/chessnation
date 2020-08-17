@@ -10,19 +10,26 @@
 </head>
 <body>
 
-<div id="colorSelection"></div>
-<button onclick="selectWhite()">Play as white</button>
-<button onclick="selectBlack()">Play as black</button>
-<div id="myBoard" style="width: 400px"></div>
-<label>Status:</label>
-<div id="status"></div>
-<label>FEN:</label>
-<div id="fen"></div>
-<label>PGN:</label>
-<div id="pgn"></div>
-<div id="meet"></div>
-<label>Video</label>
-<button onclick="sendResetBoardCommand()">Reset board</button>
+<div id="mainDiv" style="display: flex; align-content: space-between;">
+    <div id="leftSide" style="margin-left: 50px">
+        <div id="colorSelection">
+            Select your side:
+            <img src="static/wK.png" border="0" onclick="selectWhite()"/>
+            <img src="static/bK.png" border="0" onclick="selectBlack()"/>
+        </div>
+        <div id="myBoard" style="width: 600px; display: none;"></div>
+        <label>Status:</label>
+        <div id="status"></div>
+        <label>FEN:</label>
+        <div id="fen"></div>
+        <label>PGN:</label>
+        <div id="pgn"></div>
+        <button onclick="sendResetBoardCommand()">Reset board</button>
+    </div>
+    <div id="rightSide">
+        <div id="meet"></div>
+    </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
@@ -178,12 +185,16 @@
         myColor = 'w';
         updateStatus();
         board.orientation('white');
+        $('#myBoard').show();
+        $('#colorSelection').hide();
     }
 
     function selectBlack() {
         myColor = 'b';
         updateStatus();
         board.orientation('black');
+        $('#myBoard').show();
+        $('#colorSelection').hide();
     }
 
     function sendResetBoardCommand() {
