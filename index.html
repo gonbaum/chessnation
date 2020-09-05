@@ -120,48 +120,6 @@
         $pgn.html(game.pgn())
     }
 
-    var config = {
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        pieceTheme: 'static/{piece}.png'
-    }
-    board = Chessboard('myBoard', config)
-
-    updateStatus()
-
-    let host = location.origin.replace(/^http/, 'ws')
-    let socket = new WebSocket(host + "/ws");
-
-    socket.onopen = function (e) {
-        console.log("[open] Connection established")
-    };
-
-    socket.onmessage = function (event) {
-        const received = event.data;
-
-        if (received.startsWith("fen")) {
-            const fen = received.split("|")[1];
-            game.load(fen);
-        } else if (received === "reset") {
-            let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-            game.load(startingFen);
-        } else {
-            game.move({
-                from: received.substring(0, 2),
-                to: received.substring(2, 4),
-                promotion: 'q' // NOTE: always promote to a queen for example simplicity
-            });
-        }
-
-        board.position(game.fen())
-        updateStatus()
-    };
-
-    setupVideo();
-
     function setupVideo() {
         const roomNameSearch = location.pathname.match(/\/channel\/(.*)/)
         const domain = 'meet.jit.si';
@@ -205,6 +163,48 @@
     function sendResetBoardCommand() {
         socket.send("reset")
     }
+
+    var config = {
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd,
+        pieceTheme: 'static/{piece}.png'
+    }
+    board = Chessboard('myBoard', config)
+
+    updateStatus()
+
+    let host = location.origin.replace(/^http/, 'ws')
+    let socket = new WebSocket(host + "/ws");
+
+    socket.onopen = function (e) {
+        console.log("[open] Connection established")
+    };
+
+    socket.onmessage = function (event) {
+        const received = event.data;
+
+        if (received.startsWith("fen")) {
+            const fen = received.split("|")[1];
+            game.load(fen);
+        } else if (received === "reset") {
+            let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            game.load(startingFen);
+        } else {
+            game.move({
+                from: received.substring(0, 2),
+                to: received.substring(2, 4),
+                promotion: 'q' // NOTE: always promote to a queen for example simplicity
+            });
+        }
+
+        board.position(game.fen())
+        updateStatus()
+    };
+
+    setupVideo();
 </script>
 </body>
 </html>
