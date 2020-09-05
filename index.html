@@ -72,13 +72,15 @@
             from: source,
             to: target,
             promotion: 'q' // NOTE: always promote to a queen for example simplicity
-        })
+        });
 
         // illegal move
-        if (move === null) return 'snapback'
+        if (move === null) return 'snapback';
 
-        updateStatus()
-        socket.send(source + target + getPromotionPiece(move))
+        // todo piece highlighting
+
+        updateStatus();
+        socket.send(source + target + getPromotionPiece(move));
     }
 
     // update the board position after the piece snap
@@ -211,6 +213,7 @@
                 to: received.substring(2, 4),
                 promotion: 'q' // NOTE: always promote to a queen for example simplicity
             });
+            // todo use received text for piece highlighting https://chessboardjs.com/examples#5004
         }
 
         board.position(game.fen())
