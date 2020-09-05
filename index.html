@@ -197,6 +197,7 @@
 
     socket.onmessage = function (event) {
         const received = event.data;
+        console.log("Received: " + received)
 
         if (received.startsWith("fen")) {
             const fen = received.split("|")[1];
@@ -216,7 +217,7 @@
         updateStatus()
     };
 
-   setInterval(keepAlive, 2000);
+    setInterval(keepAlive, 2000);
 
     setupVideo();
 
