@@ -6,3 +6,9 @@ Next tasks:
 
 - think about handling concurrency (e.g. one player does a move, while another resets board)
 - enable multiple games/videos at the same time (e.g. keep lists of channels together)
+
+## Development
+
+To start locally run `main` in `Server.kt`.
+
+To deploy use `git push heroku master`.
