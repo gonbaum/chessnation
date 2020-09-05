@@ -12,6 +12,7 @@ import io.ktor.server.netty.Netty
 import io.ktor.websocket.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
+import org.slf4j.Logger
 
 val channels = HashSet<SendChannel<Frame>>()
 val boardHandler = BoardHandler()
@@ -35,7 +36,7 @@ fun Application.module() {
             file("index.html")
         }
         webSocket("/ws") {
-            handleNewClient()
+            handleNewClient(log)
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
@@ -46,8 +47,14 @@ fun Application.module() {
                         } else {
                             boardHandler.updateBoard(text)
                         }
-                        channels.removeIf { it.isClosedForSend }
-                        channels.forEach { it.send(Frame.Text(text)) }
+                        channels.removeIf {
+                            log.warn("Removing closed channel: $it")
+                            it.isClosedForSend
+                        }
+                        channels.forEach {
+                            log.info("Sending to: $it")
+                            it.send(Frame.Text(text))
+                        }
                     }
                 }
             }
@@ -58,7 +65,8 @@ fun Application.module() {
     }
 }
 
-private suspend fun DefaultWebSocketServerSession.handleNewClient() {
+private suspend fun DefaultWebSocketServerSession.handleNewClient(log: Logger) {
+    log.info("Adding new channel: $outgoing")
     channels.add(outgoing)
     outgoing.send(Frame.Text("fen|${boardHandler.getFen()}"))
 }
