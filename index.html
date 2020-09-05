@@ -160,26 +160,31 @@
         updateStatus()
     };
 
-    // setup video
-    const domain = 'meet.jit.si';
-    const options = {
-        roomName: 'JitsiVideoChess',
-        width: 700,
-        height: 700,
-        parentNode: document.querySelector('#meet'),
-        interfaceConfigOverwrite: {
-            TOOLBAR_BUTTONS: [
-                'microphone', 'camera', 'desktop', 'embedmeeting',
-                'fodeviceselection', 'hangup', 'profile', 'chat',
-                'livestreaming', 'etherpad', 'settings',
-                'videobackgroundblur', 'help', 'security'
-            ]
-        }
-    };
-    const api = new JitsiMeetExternalAPI(domain, options);
-    api.addEventListener('cameraError', function (event) {
-        console.log('VC Camera error ' + event)
-    });
+    setupVideo();
+
+    function setupVideo() {
+        const roomNameSearch = location.pathname.match(/\/channel\/(.*)/)
+        const domain = 'meet.jit.si';
+        const defaultRoomName = 'JitsiVideoChess'; // TODO let's avoid that
+        const options = {
+            roomName: roomNameSearch === null ? defaultRoomName : roomNameSearch[1],
+            width: 700,
+            height: 700,
+            parentNode: document.querySelector('#meet'),
+            interfaceConfigOverwrite: {
+                TOOLBAR_BUTTONS: [
+                    'microphone', 'camera', 'desktop', 'embedmeeting',
+                    'fodeviceselection', 'hangup', 'profile', 'chat',
+                    'livestreaming', 'etherpad', 'settings',
+                    'videobackgroundblur', 'help', 'security'
+                ]
+            }
+        };
+        const api = new JitsiMeetExternalAPI(domain, options);
+        api.addEventListener('cameraError', function (event) {
+            console.log('VC Camera error ' + event)
+        });
+    }
 
     function selectWhite() {
         myColor = 'w';
