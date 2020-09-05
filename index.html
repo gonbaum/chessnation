@@ -168,7 +168,17 @@
         return new WebSocket(host + "/ws");
     }
 
-    var config = {
+    // Hack for reconnection
+    function trySocketReconnection() {
+        if (socket.readyState === socket.CLOSED) {
+            console.log("Trying reconnect...")
+            const timeout = 2000;
+            socket = connectWebSocket();
+            setTimeout(trySocketReconnection, timeout);
+        }
+    }
+
+    const config = {
         draggable: true,
         position: 'start',
         onDragStart: onDragStart,
@@ -178,9 +188,9 @@
     }
     board = Chessboard('myBoard', config)
 
-    updateStatus()
+    updateStatus();
 
-    let host = location.origin.replace(/^http/, 'ws')
+    let host = location.origin.replace(/^http/, 'ws');
 
     let socket = connectWebSocket();
 
@@ -209,24 +219,13 @@
         updateStatus()
     };
 
-    /*
-    // Hack for reconnection
-    function trySocketReconnection() {
-        if (socket.readyState === socket.CLOSED) {
-            console.log("Trying reconnect...")
-            const timeout = 2000;
-            socket = connectWebSocket();
-            setTimeout(trySocketReconnection, timeout);
-        }
-    }
-
     socket.onclose = function () {
         console.log("[close] Connection closed")
         trySocketReconnection();
     }
-     */
 
     setupVideo();
+
 </script>
 </body>
 </html>
