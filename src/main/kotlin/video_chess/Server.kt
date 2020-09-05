@@ -47,10 +47,10 @@ fun Application.module() {
                         } else {
                             boardHandler.updateBoard(text)
                         }
-                        channels.removeIf {
-                            log.warn("Removing closed channel: $it")
-                            it.isClosedForSend
-                        }
+                        val closedChannels = channels
+                            .filter { it.isClosedForSend }
+                            .onEach { log.warn("Removing closed channel: $it") }
+                        channels.removeAll(closedChannels)
                         channels.forEach {
                             log.info("Sending to: $it")
                             it.send(Frame.Text(text))
