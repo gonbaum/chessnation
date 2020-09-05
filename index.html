@@ -168,13 +168,10 @@
         return new WebSocket(host + "/ws");
     }
 
-    // Hack for reconnection
-    function trySocketReconnection() {
+    function keepAlive() {
         if (socket.readyState === socket.CLOSED) {
-            console.log("Trying reconnect...")
-            const timeout = 2000;
+            console.log("Socket is closed. Trying to reconnect...")
             socket = connectWebSocket();
-            setTimeout(trySocketReconnection, timeout);
         }
     }
 
@@ -219,10 +216,7 @@
         updateStatus()
     };
 
-    socket.onclose = function () {
-        console.log("[close] Connection closed")
-        trySocketReconnection();
-    }
+   setInterval(keepAlive, 2000);
 
     setupVideo();
 
