@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
           integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
 </head>
+<style type="text/css">
+    .highlight {
+        box-shadow: inset 0 0 3px 3px blue;
+    }
+</style>
 <body>
 
 <div id="mainDiv" style="display: flex; align-content: space-between;">
@@ -17,7 +22,7 @@
             <img src="static/wK.png" border="0" onclick="selectWhite()"/>
             <img src="static/bK.png" border="0" onclick="selectBlack()"/>
         </div>
-        <div id="myBoard" style="width: 600px; display: none;"></div>
+        <div id="myBoard" style="width: 600px; "></div>
         <label>Status:</label>
         <div id="status"></div>
         <label>FEN:</label>
@@ -41,11 +46,12 @@
 <script src='https://meet.jit.si/external_api.js'></script>
 <script>
 
-    var board = null
-    var game = new Chess()
+    var board = null;
+    var game = new Chess();
     var $status = $('#status')
-    var $fen = $('#fen')
-    var $pgn = $('#pgn')
+    var $fen = $('#fen');
+    var $pgn = $('#pgn');
+    var $boardUi = $('#myBoard');
     let myColor;
 
     function onDragStart(source, piece, position, orientation) {
@@ -77,10 +83,18 @@
         // illegal move
         if (move === null) return 'snapback';
 
-        // todo piece highlighting
+        highlightLastMove(source, target);
 
         updateStatus();
         socket.send(source + target + getPromotionPiece(move));
+    }
+
+    function highlightLastMove(fromField, toField) {
+        const squareClass = 'square-55d63';
+
+        $boardUi.find('.' + squareClass).removeClass('highlight')
+        $boardUi.find('.square-' + fromField).addClass('highlight');
+        $boardUi.find('.square-' + toField).addClass('highlight');
     }
 
     // update the board position after the piece snap
@@ -150,7 +164,7 @@
         myColor = 'w';
         updateStatus();
         board.orientation('white');
-        $('#myBoard').show();
+        $boardUi.show();
         $('#colorSelection').hide();
     }
 
@@ -158,7 +172,7 @@
         myColor = 'b';
         updateStatus();
         board.orientation('black');
-        $('#myBoard').show();
+        $boardUi.show();
         $('#colorSelection').hide();
     }
 
@@ -177,12 +191,14 @@
             let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             game.load(startingFen);
         } else {
+            const source = received.substring(0, 2);
+            const target = received.substring(2, 4);
             game.move({
-                from: received.substring(0, 2),
-                to: received.substring(2, 4),
+                from: source,
+                to: target,
                 promotion: 'q' // NOTE: always promote to a queen for example simplicity
             });
-            // todo use received text for piece highlighting https://chessboardjs.com/examples#5004
+            highlightLastMove(source, target);
         }
 
         board.position(game.fen())
