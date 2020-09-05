@@ -164,6 +164,10 @@
         socket.send("reset")
     }
 
+    function connectWebSocket() {
+        return new WebSocket(host + "/ws");
+    }
+
     var config = {
         draggable: true,
         position: 'start',
@@ -177,9 +181,10 @@
     updateStatus()
 
     let host = location.origin.replace(/^http/, 'ws')
-    let socket = new WebSocket(host + "/ws");
 
-    socket.onopen = function (e) {
+    let socket = connectWebSocket();
+
+    socket.onopen = function () {
         console.log("[open] Connection established")
     };
 
@@ -203,6 +208,23 @@
         board.position(game.fen())
         updateStatus()
     };
+
+    /*
+    // Hack for reconnection
+    function trySocketReconnection() {
+        if (socket.readyState === socket.CLOSED) {
+            console.log("Trying reconnect...")
+            const timeout = 2000;
+            socket = connectWebSocket();
+            setTimeout(trySocketReconnection, timeout);
+        }
+    }
+
+    socket.onclose = function () {
+        console.log("[close] Connection closed")
+        trySocketReconnection();
+    }
+     */
 
     setupVideo();
 </script>
