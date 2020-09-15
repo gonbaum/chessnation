@@ -1,21 +1,51 @@
 package video_chess
 
 import io.ktor.application.*
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.readText
+import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
-import io.ktor.response.respondRedirect
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
-import org.slf4j.Logger
+import java.io.File
 
-val channels = HashSet<SendChannel<Frame>>()
-val boardHandler = BoardHandler()
+data class Room(
+    // todo: add name
+    val board: BoardHandler = BoardHandler(),
+    val sockets: MutableSet<SendChannel<Frame>> = mutableSetOf()
+) {
+
+    fun resetBoard() {
+        board.resetBoard()
+    }
+
+    fun updateBoard(text: String) {
+        board.updateBoard(text)
+    }
+
+    suspend fun addSocket(socket: SendChannel<Frame>) {
+        sockets.add(socket)
+        socket.send(Frame.Text("fen|${board.getFen()}"))
+    }
+
+    @ExperimentalCoroutinesApi
+    fun removeClosedSockets() {
+        val closedSockets = sockets
+            .filter { it.isClosedForSend }
+        sockets.removeAll(closedSockets)
+    }
+
+    suspend fun notifySockets(message: String) {
+        sockets.forEach {
+            it.send(Frame.Text(message))
+        }
+    }
+}
+
+val rooms = mutableMapOf<String, Room>()
 
 @ExperimentalCoroutinesApi
 fun main() {
@@ -25,6 +55,10 @@ fun main() {
         port = port,
         module = Application::module
     ).start()
+
+    // Add two testing channels
+    rooms["testing123"] = Room()
+    rooms["iloveberlin"] = Room()
 }
 
 @ExperimentalCoroutinesApi // because of isClosedForSend from SendChannel
@@ -33,41 +67,39 @@ fun Application.module() {
     install(Routing) {
         static("static") {
             files("pieces")
-            file("index.html")
         }
-        webSocket("/ws") {
-            handleNewClient(log)
-            for (frame in incoming) {
-                when (frame) {
-                    is Frame.Text -> {
-                        val text = frame.readText()
-                        log.info("Received on web socket: $text")
-                        if (text == "reset") {
-                            boardHandler.resetBoard()
-                        } else {
-                            boardHandler.updateBoard(text)
-                        }
-                        val closedChannels = channels
-                            .filter { it.isClosedForSend }
-                            .onEach { log.warn("Removing closed channel: $it") }
-                        channels.removeAll(closedChannels)
-                        channels.forEach {
-                            log.info("Sending to: $it")
-                            it.send(Frame.Text(text))
+        webSocket("/ws/{roomName}") {
+            val roomName = call.parameters["roomName"]
+            val room = rooms[roomName]
+            if (room != null) {
+                room.addSocket(outgoing)
+                for (frame in incoming) {
+                    when (frame) {
+                        is Frame.Text -> {
+                            val text = frame.readText()
+                            log.info("On: $roomName, received: $text")
+                            if (text == "reset") {
+                                room.resetBoard()
+                            } else {
+                                room.updateBoard(text)
+                            }
+
+                            room.removeClosedSockets()
+                            room.notifySockets(text)
                         }
                     }
                 }
             }
         }
         get("/") {
-            call.respondRedirect("/static/index.html", permanent = true)
+            call.respondFile(File("index.html"))
+        }
+        get("/room/{roomName}") {
+            val roomName = call.parameters["roomName"]
+            if (rooms.containsKey(roomName)) {
+                println("GET: $roomName")
+                call.respondFile(File("channel.html"))
+            }
         }
     }
 }
-
-private suspend fun DefaultWebSocketServerSession.handleNewClient(log: Logger) {
-    log.info("Adding new channel: $outgoing")
-    channels.add(outgoing)
-    outgoing.send(Frame.Text("fen|${boardHandler.getFen()}"))
-}
-

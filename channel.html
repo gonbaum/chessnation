@@ -53,6 +53,7 @@
     var $pgn = $('#pgn');
     var $boardUi = $('#myBoard');
     let myColor;
+    const roomName = location.pathname.match(/\/room\/(.*)/)[1];
 
     function onDragStart(source, piece, position, orientation) {
         if (game.turn() !== myColor || game.game_over())
@@ -137,11 +138,9 @@
     }
 
     function setupVideo() {
-        const roomNameSearch = location.pathname.match(/\/channel\/(.*)/)
         const domain = 'meet.jit.si';
-        const defaultRoomName = 'JitsiVideoChess'; // TODO let's avoid that
         const options = {
-            roomName: roomNameSearch === null ? defaultRoomName : roomNameSearch[1],
+            roomName: roomName,
             width: 700,
             height: 700,
             parentNode: document.querySelector('#meet'),
@@ -207,7 +206,7 @@
 
     function connectWebSocket() {
         const host = location.origin.replace(/^http/, 'ws');
-        const newWebSocket = new WebSocket(host + "/ws");
+        const newWebSocket = new WebSocket(host + "/ws/" + roomName);
 
         newWebSocket.onopen = () => console.log("[open] Connection established")
         newWebSocket.onmessage = event => handleNewMove(event);
