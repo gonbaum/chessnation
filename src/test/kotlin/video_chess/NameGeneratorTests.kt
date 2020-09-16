@@ -2,7 +2,7 @@ package video_chess
 
 import kotlin.test.*
 
-class NameGeneratorTest {
+class NameGeneratorTests {
     @Test
     fun `generates using single word`() {
         val nameGenerator = NameGenerator()

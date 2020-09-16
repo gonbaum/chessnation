@@ -9,43 +9,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.SendChannel
 import java.io.File
 
-data class Room(
-    // todo: add name
-    val board: BoardHandler = BoardHandler(),
-    val sockets: MutableSet<SendChannel<Frame>> = mutableSetOf()
-) {
-
-    fun resetBoard() {
-        board.resetBoard()
-    }
-
-    fun updateBoard(text: String) {
-        board.updateBoard(text)
-    }
-
-    suspend fun addSocket(socket: SendChannel<Frame>) {
-        sockets.add(socket)
-        socket.send(Frame.Text("fen|${board.getFen()}"))
-    }
-
-    @ExperimentalCoroutinesApi
-    fun removeClosedSockets() {
-        val closedSockets = sockets
-            .filter { it.isClosedForSend }
-        sockets.removeAll(closedSockets)
-    }
-
-    suspend fun notifySockets(message: String) {
-        sockets.forEach {
-            it.send(Frame.Text(message))
-        }
-    }
-}
-
-val rooms = mutableMapOf<String, Room>()
+val rooms = mutableSetOf<Room>()
 
 @ExperimentalCoroutinesApi
 fun main() {
@@ -57,8 +23,8 @@ fun main() {
     ).start()
 
     // Add two testing channels
-    rooms["testing123"] = Room()
-    rooms["iloveberlin"] = Room()
+    rooms.add(Room("testing123"))
+    rooms.add(Room("iloveberlin"))
 }
 
 @ExperimentalCoroutinesApi // because of isClosedForSend from SendChannel
@@ -70,7 +36,7 @@ fun Application.module() {
         }
         webSocket("/ws/{roomName}") {
             val roomName = call.parameters["roomName"]
-            val room = rooms[roomName]
+            val room = rooms.find { it.name == roomName }
             if (room != null) {
                 room.addSocket(outgoing)
                 for (frame in incoming) {
@@ -96,7 +62,7 @@ fun Application.module() {
         }
         get("/room/{roomName}") {
             val roomName = call.parameters["roomName"]
-            if (rooms.containsKey(roomName)) {
+            if (rooms.any { it.name == roomName }) {
                 println("GET: $roomName")
                 call.respondFile(File("channel.html"))
             }
