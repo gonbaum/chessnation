@@ -1,6 +1,7 @@
 package video_chess
 
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
 import io.ktor.response.*
@@ -62,9 +63,21 @@ fun Application.module() {
         }
         get("/room/{roomName}") {
             val roomName = call.parameters["roomName"]
+            log.info("GET: $roomName")
             if (rooms.any { it.name == roomName }) {
-                println("GET: $roomName")
                 call.respondFile(File("channel.html"))
+            }
+        }
+        post("/room/{roomName}") {
+            val roomName = call.parameters["roomName"]!!
+            log.info("POST: $roomName")
+            if (!rooms.any { it.name == roomName } && roomName.length >= 12) {
+                rooms.add(Room(roomName))
+                log.info("$roomName created")
+                call.respond(HttpStatusCode.Created, "room created")
+            } else {
+                log.error("$roomName not created")
+                call.respond(HttpStatusCode.BadRequest, "incorrect room name")
             }
         }
     }
