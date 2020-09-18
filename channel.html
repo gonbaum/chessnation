@@ -29,7 +29,7 @@
         <div id="fen"></div>
         <label>PGN:</label>
         <div id="pgn"></div>
-        <button onclick="sendResetBoardCommand()">Reset board</button>
+        <button onclick="resetBoard()">Reset board</button>
     </div>
     <div id="rightSide">
         <div id="meet"></div>
@@ -175,8 +175,9 @@
         $('#colorSelection').hide();
     }
 
-    function sendResetBoardCommand() {
-        socket.send("reset")
+    function resetBoard() {
+        socket.send("reset");
+        $('#colorSelection').show();
     }
 
     function handleNewMove(event) {
