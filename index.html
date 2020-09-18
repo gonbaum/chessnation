@@ -15,38 +15,33 @@
 </style>
 <body>
 <div id="mainDiv" class="l-box">
-    <h3>Welcome in chess with video application!</h3>
-    <form class="pure-form">
-        <fieldset>
-            <legend>Enter channel name (for uniqueness use minimum 12 characters):</legend>
-            <input id="channelNameInput" type="text" placeholder="Channel name" required=""/>
-            <button id="submitButton" type="submit" class="pure-button pure-button-primary" onclick="createChannel()"
-                    disabled="">
-                Create
-            </button>
-        </fieldset>
-    </form>
+    <h2>Welcome to the chess with video application!</h2>
+    <div>
+        <h4>Enter room name (for uniqueness use minimum 12 characters):</h4>
+        <input id="roomNameInput" type="text" placeholder="Room name" required=""/>
+        <button id="joinButton" class="pure-button pure-button-primary" onclick="join()" disabled="">
+            Join
+        </button>
+    </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script>
-    let $channelNameInput = $('#channelNameInput');
-    let $submitButton = $('#submitButton');
+    let $roomNameInput = $('#roomNameInput');
+    let $joinButton = $('#joinButton');
 
     const inputHandler = function () {
-        if ($channelNameInput.val().length >= 12)
-            $submitButton.prop('disabled', false);
+        if ($roomNameInput.val().length >= 12)
+            $joinButton.prop('disabled', false);
         else
-            $submitButton.prop('disabled', true);
+            $joinButton.prop('disabled', true);
     }
 
-    $channelNameInput.on('input', inputHandler);
+    $roomNameInput.on('input', inputHandler);
 
-    function createChannel() {
-        const roomPath = "/room/" + $channelNameInput.val();
-        $.post(roomPath, function () {
-            window.location.replace(roomPath);
-        });
+    function join() {
+        window.location.replace("/room/" + $roomNameInput.val());
     }
+
 </script>
 </body>
 </html>

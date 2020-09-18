@@ -62,19 +62,14 @@ fun Application.module() {
             call.respondFile(File("index.html"))
         }
         get("/room/{roomName}") {
-            val roomName = call.parameters["roomName"]
+            val roomName = call.parameters["roomName"]!!
             log.info("GET: $roomName")
             if (rooms.any { it.name == roomName }) {
                 call.respondFile(File("channel.html"))
-            }
-        }
-        post("/room/{roomName}") {
-            val roomName = call.parameters["roomName"]!!
-            log.info("POST: $roomName")
-            if (!rooms.any { it.name == roomName } && roomName.length >= 12) {
+            } else if (roomName.length >= 12) {
                 rooms.add(Room(roomName))
                 log.info("$roomName created")
-                call.respond(HttpStatusCode.Created, "room created")
+                call.respondFile(File("channel.html"))
             } else {
                 log.error("$roomName not created")
                 call.respond(HttpStatusCode.BadRequest, "incorrect room name")
