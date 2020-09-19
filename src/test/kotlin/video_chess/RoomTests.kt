@@ -7,6 +7,7 @@ import kotlinx.coroutines.selects.SelectClause2
 import kotlinx.coroutines.selects.SelectInstance
 import kotlin.test.*
 
+@ExperimentalCoroutinesApi
 class RoomTests {
     @Test
     fun `sends starting fen position and another message`() {
