@@ -22,10 +22,6 @@ fun main() {
         port = port,
         module = Application::module
     ).start()
-
-    // Add two testing channels
-    rooms.add(Room("testing123"))
-    rooms.add(Room("iloveberlin"))
 }
 
 @ExperimentalCoroutinesApi // because of isClosedForSend from SendChannel
