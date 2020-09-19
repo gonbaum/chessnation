@@ -1,8 +1,14 @@
 package video_chess
 
-import io.ktor.application.*
-import io.ktor.http.*
-import io.ktor.server.testing.*
+import io.ktor.application.Application
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.withCharset
+import io.ktor.server.testing.TestApplicationEngine
+import io.ktor.server.testing.contentType
+import io.ktor.server.testing.handleRequest
+import io.ktor.server.testing.withTestApplication
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.nio.charset.Charset
@@ -67,7 +73,7 @@ class ServerTests {
         }
     }
 
-    private fun serverTest(callback: suspend TestApplicationEngine.() -> Unit): Unit {
+    private fun serverTest(callback: suspend TestApplicationEngine.() -> Unit) {
         withTestApplication(Application::module) {
             runBlocking { callback() }
         }

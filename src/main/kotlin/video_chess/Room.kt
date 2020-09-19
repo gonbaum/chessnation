@@ -1,6 +1,6 @@
 package video_chess
 
-import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.Frame
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 

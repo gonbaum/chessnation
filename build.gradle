@@ -3,12 +3,14 @@ buildscript {
         jcenter()
     }
     dependencies {
+        classpath 'org.jlleitschuh.gradle:ktlint-gradle:9.4.0'
         classpath 'com.github.jengelman.gradle.plugins:shadow:6.0.0'
     }
 }
 plugins {
     id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
 }
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {

@@ -10,4 +10,10 @@ Next tasks:
 
 To start locally run `main` in `Server.kt`.
 
-To deploy use `git push heroku master`.
+### Heroku deployment
+
+`git push heroku master`
+
+### Linting
+
+`gradle ktlintCheck`

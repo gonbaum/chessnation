@@ -1,6 +1,9 @@
 package video_chess
 
-import com.github.bhlangonijr.chesslib.*
+import com.github.bhlangonijr.chesslib.Board
+import com.github.bhlangonijr.chesslib.Piece
+import com.github.bhlangonijr.chesslib.Side
+import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.move.Move
 
 class BoardHandler {
