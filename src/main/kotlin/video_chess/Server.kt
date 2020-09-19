@@ -27,9 +27,10 @@ fun main() {
 @ExperimentalCoroutinesApi // because of isClosedForSend from SendChannel
 fun Application.module() {
     install(WebSockets) {}
+    val sourcesPath = "src/frontendMain"
     install(Routing) {
         static("static") {
-            files("pieces")
+            files("${sourcesPath}/resources/pieces")
         }
         webSocket("/ws/{roomName}") {
             val roomName = call.parameters["roomName"]
@@ -55,17 +56,17 @@ fun Application.module() {
             }
         }
         get("/") {
-            call.respondFile(File("index.html"))
+            call.respondFile(File("${sourcesPath}/index.html"))
         }
         get("/room/{roomName}") {
             val roomName = call.parameters["roomName"]!!
             log.info("GET: $roomName")
             if (rooms.any { it.name == roomName }) {
-                call.respondFile(File("channel.html"))
+                call.respondFile(File("${sourcesPath}/channel.html"))
             } else if (roomName.length >= 12 && !roomName.contains(Regex("\\s"))) {
                 rooms.add(Room(roomName))
                 log.info("$roomName created")
-                call.respondFile(File("channel.html"))
+                call.respondFile(File("${sourcesPath}/channel.html"))
             } else {
                 log.error("$roomName not created")
                 call.respond(HttpStatusCode.BadRequest, "incorrect room name")
