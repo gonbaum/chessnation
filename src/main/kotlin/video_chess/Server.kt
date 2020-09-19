@@ -66,7 +66,7 @@ fun Application.module() {
             log.info("GET: $roomName")
             if (rooms.any { it.name == roomName }) {
                 call.respondFile(File("channel.html"))
-            } else if (roomName.length >= 12) {
+            } else if (roomName.length >= 12 && !roomName.contains(Regex("\\s"))) {
                 rooms.add(Room(roomName))
                 log.info("$roomName created")
                 call.respondFile(File("channel.html"))
