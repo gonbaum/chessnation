@@ -25,6 +25,19 @@ class RoomTests {
     }
 
     @Test
+    fun `does not notify for incorrect move`() {
+        val rooms = RoomsHandler()
+        val roomName = "test"
+        val player = TestPlayer()
+
+        rooms.createRoom(roomName)
+        rooms.addPlayer(roomName, player)
+        rooms.updatePosition(roomName, "e1e5")
+
+        assertEquals(listOf("fen|rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"), player.messages)
+    }
+
+    @Test
     fun `does not notify disconnected players`() {
         val rooms = RoomsHandler()
         val roomName = "test"

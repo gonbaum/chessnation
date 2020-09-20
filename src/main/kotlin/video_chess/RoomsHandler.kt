@@ -19,9 +19,9 @@ class RoomsHandler {
 
     fun updatePosition(name: String, position: String) {
         forRoom(name) {
-            it.board.updateBoard(position)
             removeDisconnectedPlayers()
-            it.players.forEach { player -> player.notify(position) }
+            if (it.board.updateBoard(position))
+                it.players.forEach { player -> player.notify(position) }
         }
     }
 

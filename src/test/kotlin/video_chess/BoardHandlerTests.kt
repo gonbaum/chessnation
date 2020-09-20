@@ -2,6 +2,7 @@ package video_chess
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class BoardHandlerTests {
     @Test
@@ -27,5 +28,11 @@ class BoardHandlerTests {
         boardHandler.resetBoard()
 
         assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", boardHandler.getFen())
+    }
+
+    @Test
+    fun `returns false for incorrect move`() {
+        val boardHandler = BoardHandler()
+        assertFalse(boardHandler.updateBoard("e7e5"))
     }
 }
