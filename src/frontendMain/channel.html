@@ -232,6 +232,7 @@
         } else if (received === "reset") {
             let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             game.load(startingFen);
+            $('#colorSelection').show();
         } else {
             const source = received.substring(0, 2);
             const target = received.substring(2, 4);
