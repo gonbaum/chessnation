@@ -18,9 +18,12 @@ import io.ktor.server.netty.Netty
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.launch
 import java.io.File
 
-val rooms = mutableSetOf<Room>()
+val rooms = RoomsHandler()
 
 @ExperimentalCoroutinesApi
 fun main() {
@@ -41,23 +44,17 @@ fun Application.module() {
             files("$sourcesPath/resources/pieces")
         }
         webSocket("/ws/{roomName}") {
-            val roomName = call.parameters["roomName"]
-            val room = rooms.find { it.name == roomName }
-            if (room != null) {
-                room.addSocket(outgoing)
-                for (frame in incoming) {
-                    when (frame) {
-                        is Frame.Text -> {
-                            val text = frame.readText()
-                            log.info("On: $roomName, received: $text")
-                            if (text == "reset") {
-                                room.resetBoard()
-                            } else {
-                                room.updateBoard(text)
-                            }
-
-                            room.removeClosedSockets()
-                            room.notifySockets(text)
+            val roomName = call.parameters["roomName"]!!
+            rooms.addPlayer(roomName, SocketPlayer(outgoing))
+            for (frame in incoming) {
+                when (frame) {
+                    is Frame.Text -> {
+                        val text = frame.readText()
+                        log.info("On: $roomName, received: $text")
+                        if (text == "reset") {
+                            rooms.resetPosition(roomName)
+                        } else {
+                            rooms.updatePosition(roomName, text)
                         }
                     }
                 }
@@ -69,10 +66,8 @@ fun Application.module() {
         get("/room/{roomName}") {
             val roomName = call.parameters["roomName"]!!
             log.info("GET: $roomName")
-            if (rooms.any { it.name == roomName }) {
-                call.respondFile(File("$sourcesPath/channel.html"))
-            } else if (roomName.length >= 12 && !roomName.contains(Regex("\\s"))) {
-                rooms.add(Room(roomName))
+            if (roomName.length >= 12 && !roomName.contains(Regex("\\s"))) {
+                rooms.createRoom(roomName)
                 log.info("$roomName created")
                 call.respondFile(File("$sourcesPath/channel.html"))
             } else {
@@ -80,5 +75,17 @@ fun Application.module() {
                 call.respond(HttpStatusCode.BadRequest, "incorrect room name")
             }
         }
+    }
+}
+
+class SocketPlayer(private val outgoing: SendChannel<Frame>) : Player {
+    override fun notify(message: String) {
+        GlobalScope.launch {
+            outgoing.send(Frame.Text(message))
+        }
+    }
+
+    override fun isDisconnected(): Boolean {
+        return outgoing.isClosedForSend
     }
 }
