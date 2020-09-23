@@ -12,7 +12,7 @@ class BoardHandler {
 
     fun updateBoard(text: String): Boolean {
         val move = when (text.length) {
-            4 ->  // regular move
+            4 -> // regular move
                 Move(
                     Square.fromValue(text.substring(0, 2).toUpperCase()),
                     Square.fromValue(text.substring(2, 4).toUpperCase())

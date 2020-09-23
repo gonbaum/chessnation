@@ -54,18 +54,25 @@ class RoomTests {
     fun `supports multiroom`() {
         val rooms = RoomsHandler()
         rooms.createRoom("test1")
-        val player1 = TestPlayer()
-        rooms.addPlayer("test1", player1)
+        val player1a = TestPlayer()
+        val player1b = TestPlayer()
+        rooms.addPlayer("test1", player1a)
+        rooms.addPlayer("test1", player1b)
         rooms.updatePosition("test1", "e2e4")
 
         rooms.createRoom("test2")
-        val player2 = TestPlayer()
-        rooms.addPlayer("test2", player2)
+        val player2a = TestPlayer()
+        val player2b = TestPlayer()
+        rooms.addPlayer("test2", player2a)
+        rooms.addPlayer("test2", player2b)
         rooms.updatePosition("test2", "d2d4")
+        rooms.updatePosition("test2", "h7h6")
 
         val startingPosition = "fen|rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-        assertEquals(listOf(startingPosition, "e2e4"), player1.messages)
-        assertEquals(listOf(startingPosition, "d2d4"), player2.messages)
+        assertEquals(listOf(startingPosition, "e2e4"), player1a.messages)
+        assertEquals(listOf(startingPosition, "e2e4"), player1b.messages)
+        assertEquals(listOf(startingPosition, "d2d4", "h7h6"), player2a.messages)
+        assertEquals(listOf(startingPosition, "d2d4", "h7h6"), player2b.messages)
     }
 }
 

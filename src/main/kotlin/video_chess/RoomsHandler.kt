@@ -1,7 +1,12 @@
 package video_chess
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.slf4j.LoggerFactory
+
 class RoomsHandler {
     private val rooms = mutableMapOf<String, Room>()
+    private val log = LoggerFactory.getLogger(RoomsHandler::class.java)
 
     fun createRoom(name: String) {
         if (rooms.containsKey(name))
@@ -23,6 +28,8 @@ class RoomsHandler {
             if (it.board.updateBoard(position))
                 it.players.forEach { player -> player.notify(position) }
         }
+
+        printStatus()
     }
 
     fun resetPosition(name: String) {
@@ -40,6 +47,13 @@ class RoomsHandler {
         val room = rooms[roomName]
         if (room != null) {
             action(room)
+        }
+    }
+
+    private fun printStatus() {
+        GlobalScope.launch {
+            val playersString = rooms.values.map { it.players.count() }.joinToString { it.toString() }
+            log.info("Rooms count ${rooms.count()}, with players: $playersString")
         }
     }
 }
