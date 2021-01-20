@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
           integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/main.css"/>
 </head>
 <style type="text/css">
     /*noinspection CssUnusedSymbol*/
@@ -23,43 +24,56 @@
 </style>
 <body>
 
-<div id="mainDiv" class="pure-g">
-    <div class="pure-u-1 pure-u-xl-1-2">
-        <div id="leftSide" class="l-box">
-            <div id="colorSelection">
-                <div class="l-box">
-                    Select your side:
-                </div>
-                <table class="l-box">
-                    <tbody>
-                    <tr>
-                        <td><a class="pure-button" onclick="selectWhite()">White</a></td>
-                        <td><a class="pure-button" onclick="selectBlack()">Black</a></td>
-                    </tr>
-                    <tr>
-                        <td><img src="static/wK.png" border="0" onclick="selectWhite()"/></td>
-                        <td><img src="static/bK.png" border="0" onclick="selectBlack()"/></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+<div id="mainDiv" class="container">
+    <div id="logoChannel">
+        <img id="logo" class="l-box" src="static/greychess.png">
+    </div>
+    <div class="top-bar">
+        <div id="colorSelection" class="l-box">
             <div>
-                <div id="myBoard" class="l-box" style="width: 600px; "></div>
-                <button class="pure-button" onclick="resetBoard()">Reset board</button>
-                <button id="toggleDetails" class="pure-button" onclick="toggleDetails()">Show details</button>
+                <h3>
+                    Select your side:
+                </h3>
             </div>
-            <div id="gameDetails" style="display: none;">
-                <label>Status:</label>
-                <div id="status"></div>
-                <label>FEN:</label>
-                <div id="fen"></div>
-                <label>PGN:</label>
-                <div id="pgn"></div>
-            </div>
+            <table class="">
+                <tbody>
+                <tr>
+                    <td><a class="pure-button" onclick="selectWhite()">White</a></td>
+                    <td><a class="pure-button" onclick="selectBlack()">Black</a></td>
+                </tr>
+                <tr>
+                    <td><img src="static/wK.png" border="0" onclick="selectWhite()"/></td>
+                    <td><img src="static/bK.png" border="0" onclick="selectBlack()"/></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="pure-u-1 pure-u-xl-1-2">
-        <div id="meet" class="l-box"></div>
+    <div class="left-side">
+
+            <div id="myBoard" class="l-box">
+            </div>
+
+    </div>
+
+    <div class="right-side">
+            <div id="meet" class="meeting l-box"></div>
+    </div>
+
+    <div class="bottom-bar">
+        <div id="buttons" class="l-box">
+
+            <button class="pure-button" onclick="resetBoard()">Reset board</button>
+            <button id="toggleDetails" class="pure-button" onclick="toggleDetails()">Show details</button>
+        </div>
+        <div id="gameDetails" class="l-box" style="display: none;" >
+            <label>Status:</label>
+            <div id="status"></div>
+            <label>FEN:</label>
+            <div id="fen"></div>
+            <label>PGN:</label>
+            <div id="pgn"></div>
+        </div>
     </div>
 </div>
 
@@ -171,8 +185,8 @@
         const domain = 'meet.jit.si';
         const options = {
             roomName: roomName,
-            width: 700,
-            height: 700,
+            width: "100%",
+            height: "100%",
             parentNode: document.querySelector('#meet'),
             interfaceConfigOverwrite: {
                 TOOLBAR_BUTTONS: [
@@ -208,6 +222,10 @@
     function resetBoard() {
         socket.send("reset");
         $('#colorSelection').show();
+
+        // clear highlight move when board is reset (Gonzalo)
+        const squareClass = 'square-55d63';
+        $boardUi.find('.' + squareClass).removeClass('highlight')
     }
 
     function toggleDetails() {
@@ -270,13 +288,17 @@
 
     const config = {
         draggable: true,
+        moveSpeed: 'slow',
+        snapbackSpeed: 500,
         position: 'start',
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd,
         pieceTheme: 'static/{piece}.png'
     }
+
     board = Chessboard('myBoard', config)
+    $(window).resize(board.resize)
 
     updateStatus();
 
