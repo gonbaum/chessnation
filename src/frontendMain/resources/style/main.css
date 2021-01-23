@@ -203,20 +203,20 @@ top:0;
 
 
 @media screen and (max-width: 1400px) {
-    .p-m-4 {
-     padding: 1rem;
+    .pl-m-4 {
+     padding-left: 1rem;
     {
 }
 
 @media screen and (max-width: 1000px) {
-    .p-m-4 {
-     padding: 1rem;
+    .pl-m-4 {
+     padding-left: 1rem;
     {
 }
 
 @media screen and (max-width: 700px) {
-    .p-m-4 {
-     padding: 1rem;
+    .pl-m-4 {
+     padding-left: 1rem;
     {
 }
 /*
