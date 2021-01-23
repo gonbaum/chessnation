@@ -1,9 +1,30 @@
 /*html*/
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 body, html {
 	background-color: #D9D9D9;
 	color: #373737;
 	width: 100%;
 
+}
+
+.p-1 {
+    padding: 1rem;
+}
+.pt-1 {
+    padding-top: 1rem;
+}
+
+.p-2 {
+    padding: 2rem;
+}
+
+.pl-m-4 {
+    padding-left: 8%;
 }
 
 p {
@@ -28,6 +49,12 @@ h2 {
 	letter-spacing: .8px;
 	font-size: 1.8em;
 }
+
+h4 {
+  font-family: Roboto;
+  margin-bottom: 0;
+}
+
 
 a {
   font-family: Castoro !important;
@@ -67,10 +94,6 @@ a {
 }
 
 
-.row {
-  padding: 0 50px;
-}
-
 
 /*board*/
 /*
@@ -98,13 +121,6 @@ a {
    justify-content: space-between;
  }
 
-.top-bar {
-   width: 100%;
-   display: flex;
-   justify-content: space-around;
-   align-items: center;
-}
-
 #colorSelection {
        display: flex;
        justify-content:left;
@@ -112,39 +128,27 @@ a {
        text-align: center;
  }
 
- .left-side {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    width: 48%;
- }
-
  #myBoard {
- width: 60%;
+ width: 40rem;
  }
  #meet {
- width: 75%; height: 90%;
+ width: 40rem; height: 40rem;
  }
 
- .right-side {
-
-     display: flex;
-     flex: 1;
-     justify-content: center;
-     align-items: center;
-     padding: 1rem;
-     width: 48%;
+ #gameDetails {
+ display:none;
+    width: 40rem;
  }
 
- .bottom-bar {
+  #buttons {
+      display: flex;
+      justify-content: flex-start;
+      align-self: flex-start;
+  }
 
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
- }
+  .pure-button {
+  margin: .5rem;
+  }
 
  #logoChannel {
 position:absolute;
@@ -153,41 +157,79 @@ top:0;
  }
 
 
+
+/* Layout classes */
+
+.center {
+    align-items: center;
+}
+
+.half {
+    width: 50%;
+}
+
+.some-page-wrapper {
+  margin: 15px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+      padding-inline-start: 0.5rem;
+
+}
+
 /*media*/
+
+
+
 @media screen and (max-width: 1400px) {
-   #myBoard {
-   width: 80%;
-   }
-   #meet {
-   width: 85%; height: 85%;
-   }
+    .p-m-4 {
+     padding: 1rem;
+    {
 }
 
 @media screen and (max-width: 1000px) {
-   #myBoard {
-   width: 90%;
-   }
-   #meet {
-   width: 85%; height: 75%;
-   }
+    .p-m-4 {
+     padding: 1rem;
+    {
 }
 
 @media screen and (max-width: 700px) {
-   #myBoard {
-   width: 100%;
-   }
-   #meet {
-   width: 95%; height: 65%;
-   }
+    .p-m-4 {
+     padding: 1rem;
+    {
 }
+/*
 
 @media only screen and (orientation:portrait){
   body {
     height: 100vw;
     transform: rotate(90deg);
   }
-
+*/
 
 }
+
+
 
 

@@ -18,62 +18,89 @@
     .highlight { /* used for highlighting last move */
         box-shadow: inset 0 0 3px 3px blue;
     }
-    .l-box {
-        padding: 1em;
-    }
 </style>
 <body>
 
-<div id="mainDiv" class="container">
-    <div id="logoChannel">
-        <img id="logo" class="l-box" src="static/greychess.png">
+<div id="mainDiv" class="some-page-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <img id="logo" class="p-1" src="static/greychess.png">
+        </div>
+
+        <ul class="nav-links">
+            <li class="pure-button av-item" onclick="resetBoard()">Reset board</li>
+            <li id="toggleDetails" class="pure-button av-item" onclick="toggleDetails()">Show details</li>
+        </ul>
+    </nav>
+
+    <div class="row" style="width: 50%;">
+
     </div>
-    <div class="top-bar">
-        <div id="colorSelection" class="l-box">
-            <div>
-                <h3>
-                    Select your side:
-                </h3>
+
+    <div class='row'>
+        <div class='column center'>
+
+                <div id="myBoard" class="p-1">
+                </div>
+
+            <div id="colorSelection" class="column p-1" >
+                <div>
+                    <h3>
+                        Select your side:
+                    </h3>
+                </div>
+                <table class="">
+                    <tbody>
+                    <tr>
+                        <td><button class="pure-button" onclick="selectWhite()">White</button></td>
+                        <td><img src="static/wK.png" border="0" onclick="selectWhite()"/></td>
+
+
+                        <td><button class="pure-button" onclick="selectBlack()">Black</button></td>
+                        <td><img src="static/bK.png" border="0" onclick="selectBlack()"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+
             </div>
-            <table class="">
-                <tbody>
-                <tr>
-                    <td><a class="pure-button" onclick="selectWhite()">White</a></td>
-                    <td><a class="pure-button" onclick="selectBlack()">Black</a></td>
-                </tr>
-                <tr>
-                    <td><img src="static/wK.png" border="0" onclick="selectWhite()"/></td>
-                    <td><img src="static/bK.png" border="0" onclick="selectBlack()"/></td>
-                </tr>
-                </tbody>
-            </table>
+        </div>
+
+        <div class='column center'>
+                <div id="meet" class="meeting p-1"></div>
         </div>
     </div>
-    <div class="left-side">
 
-            <div id="myBoard" class="l-box">
+    <div class="row">
+
+        <div id="gameDetails" class="pl-m-4 pt-1">
+
+            <div class="row">
+                <div class="column half">
+                    <h4>Status:</h4>
+                    <div id="status"></div>
+                </div>
+
+                <div class="column half">
+                    <h4>PGN:</h4>
+                    <div id="pgn"></div>
+
+                </div>
             </div>
 
-    </div>
+            <div class="row">
+                <div class="column half">
+                    <h4>Last movement:</h4>
+                    <div id="move"></div>
+                </div>
 
-    <div class="right-side">
-            <div id="meet" class="meeting l-box"></div>
-    </div>
-
-    <div class="bottom-bar">
-        <div id="buttons" class="l-box">
-
-            <button class="pure-button" onclick="resetBoard()">Reset board</button>
-            <button id="toggleDetails" class="pure-button" onclick="toggleDetails()">Show details</button>
+                <div class="column half" >
+                    <h4>FEN:</h4>
+                    <div id="fen"></div>
+                </div>
+            </div>
         </div>
-        <div id="gameDetails" class="l-box" style="display: none;" >
-            <label>Status:</label>
-            <div id="status"></div>
-            <label>FEN:</label>
-            <div id="fen"></div>
-            <label>PGN:</label>
-            <div id="pgn"></div>
-        </div>
+
+
     </div>
 </div>
 
@@ -92,6 +119,10 @@
     var $status = $('#status')
     var $fen = $('#fen');
     var $pgn = $('#pgn');
+
+    // Store last event in $move (Gonzalo
+    var $move = $('#move');
+
     var $boardUi = $('#myBoard');
     let myColor;
     const roomName = location.pathname.match(/\/room\/(.*)/)[1];
@@ -148,12 +179,14 @@
         board.position(game.fen())
     }
 
-    function updateStatus() {
+    function updateStatus(movement) {
         var status = ''
 
         var moveColor = 'White'
+        var lastMoveColor = 'Black'
         if (game.turn() === 'b') {
             moveColor = 'Black'
+            lastMoveColor = 'White'
         }
 
         // checkmate?
@@ -179,6 +212,12 @@
         $status.html(status)
         $fen.html(game.fen())
         $pgn.html(game.pgn())
+
+        // Update also 'move' label with last event info (Gonzalo):
+        if (movement && movement.length < 5) {
+         $move.html(`${movement} (${lastMoveColor})`)
+         console.log(movement.length)
+        }
     }
 
     function setupVideo() {
@@ -263,7 +302,9 @@
         }
 
         board.position(game.fen())
-        updateStatus()
+
+        // Send received as a parameter to update movement (Gonzalo)
+        updateStatus(received)
     }
 
     function connectWebSocket() {
