@@ -43,33 +43,33 @@
                 <div id="myBoard" class="p-1">
                 </div>
 
-            <div id="colorSelection" class="column p-1" >
-                <div>
-                    <h3>
-                        Select your side:
-                    </h3>
-                </div>
-                <table class="">
-                    <tbody>
-                    <tr>
-                        <td><button class="pure-button" onclick="selectWhite()">White</button></td>
-                        <td><img src="static/wK.png" border="0" onclick="selectWhite()"/></td>
 
-
-                        <td><button class="pure-button" onclick="selectBlack()">Black</button></td>
-                        <td><img src="static/bK.png" border="0" onclick="selectBlack()"/></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-            </div>
         </div>
 
         <div class='column center'>
                 <div id="meet" class="meeting p-1"></div>
         </div>
     </div>
+    <div class="row-2">
+        <div id="colorSelection" class="column p-1" >
+            <div>
+                <h3>
+                    Select your side:
+                </h3>
+            </div>
+            <table class="">
+                <div>
+                    <div><button class="pure-button" onclick="selectWhite()">White</button></div>
+                    <div><img src="static/wK.png" border="0" onclick="selectWhite()"/></div>
+                </div>
+                <div>
+                    <div><button class="pure-button" onclick="selectBlack()">Black</button></div>
+                    <div><img src="static/bK.png" border="0" onclick="selectBlack()"/></div>
+                </div>
+            </table>
 
+        </div>
+    </div>
     <div class="row">
 
         <div id="gameDetails" class="pl-m-4 pt-1">
@@ -120,8 +120,11 @@
     var $fen = $('#fen');
     var $pgn = $('#pgn');
 
-    // Store last event in $move (Gonzalo
+    // Store last event in $move (Gonzalo)
     var $move = $('#move');
+
+    // Store if a color has been chosen (Gonzalo)
+    var $colorChosen = false;
 
     var $boardUi = $('#myBoard');
     let myColor;
@@ -132,6 +135,10 @@
 
     function onDragStart(source, piece, position, orientation) {
         if (game.turn() !== myColor || game.game_over())
+            return false;
+
+        // If player hasn't chose a color, disable any move. (Gonzalo)
+        if ($colorChosen === false)
             return false;
 
         // only pick up pieces for the side to move
@@ -244,6 +251,8 @@
 
     function selectWhite() {
         myColor = 'w';
+        $colorChosen = true;
+        sessionStorage.setItem("color", "white");
         updateStatus();
         board.orientation('white');
         $boardUi.show();
@@ -252,6 +261,8 @@
 
     function selectBlack() {
         myColor = 'b';
+        $colorChosen = true;
+        sessionStorage.setItem("color", "black");
         updateStatus();
         board.orientation('black');
         $boardUi.show();
@@ -261,10 +272,15 @@
     function resetBoard() {
         socket.send("reset");
         $('#colorSelection').show();
+        $colorChosen = false;
+        sessionStorage.setItem("color", null);
 
         // clear highlight move when board is reset (Gonzalo)
         const squareClass = 'square-55d63';
         $boardUi.find('.' + squareClass).removeClass('highlight')
+
+
+
     }
 
     function toggleDetails() {
@@ -338,8 +354,8 @@
         pieceTheme: 'static/{piece}.png'
     }
 
-    board = Chessboard('myBoard', config)
-    $(window).resize(board.resize)
+    board = Chessboard('myBoard', config);
+    $(window).resize(board.resize);
 
     updateStatus();
 

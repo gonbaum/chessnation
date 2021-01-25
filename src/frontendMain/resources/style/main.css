@@ -31,7 +31,7 @@ p {
 	font-family: Castoro;
 	letter-spacing: .8px;
 	font-size: 1em;
-  text-align: center;
+    text-align: center;
 }
 
 h1 {
@@ -123,14 +123,17 @@ a {
 
 #colorSelection {
        display: flex;
-       justify-content:left;
+       justify-content:center;
        align-items: start;
        text-align: center;
+       flex-direction: row;
+
  }
 
  #myBoard {
  width: 40rem;
  }
+
  #meet {
  width: 40rem; height: 40rem;
  }
@@ -169,7 +172,7 @@ top:0;
 }
 
 .some-page-wrapper {
-  margin: 15px;
+  margin: 5px;
 }
 
 .row {
@@ -179,11 +182,19 @@ top:0;
   width: 100%;
 }
 
+.row-2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  width: 50%;
+}
+
 .column {
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
+  word-break: break-all;
 }
 
 .navbar {
@@ -202,15 +213,64 @@ top:0;
 
 
 
-@media screen and (max-width: 1400px) {
-    .pl-m-4 {
-     padding-left: 1rem;
-    {
+@media only screen and (max-width: 1300px) {
+
+     #myBoard {
+           width: 30rem;
+           height: 30rem;
+    }
+     #meet {
+           width: 30rem;
+           height: 30rem;
+     }
+          #gameDetails {
+                 padding-left: 6%;
+          }
+
 }
 
+@media only screen and (max-width: 960px) {
+
+     #myBoard {
+           width: 20rem;
+           height: 20rem;
+    }
+     #meet {
+           width: 20rem;
+           height: 20rem;
+     }
+          #gameDetails {
+                 padding-left: 5%;
+                 line-break: auto;
+
+          }
+     .row-2 {
+        width: 90%;
+     }
+}
+
+@media only screen and (max-width: 645px) {
+
+     #myBoard {
+           width: 15rem;
+           height: 15rem;
+    }
+     #meet {
+           width: 15rem;
+           height: 15rem;
+     }
+          #gameDetails {
+                 margin: 10px;
+                 padding-left: 2%;
+                 line-break: auto;
+          }
+}
+
+/*
 @media screen and (max-width: 1000px) {
     .pl-m-4 {
      padding-left: 1rem;
+
     {
 }
 
@@ -228,7 +288,7 @@ top:0;
   }
 */
 
-}
+
 
 
 
