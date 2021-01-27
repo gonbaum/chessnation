@@ -100,7 +100,8 @@ a {
 .greychess {
   display: flex;
   flex-direction: column;
-  justify-content:center;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
@@ -113,9 +114,16 @@ a {
 }
 
 #chessnation {
-  padding-top: 30px;
+  padding-top: 2rem;
+  margin-bottom: -2rem;
 }
 
+.enter-room {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
 
 
 /*board*/
@@ -186,6 +194,10 @@ a {
   margin: .5rem;
   border-radius: 2px;
   background-color: white;
+}
+
+#joinButton {
+   color: black;
 }
 
  #logoChannel {
