@@ -29,7 +29,7 @@
 
         <ul class="nav-links">
             <li class="pure-button av-item" onclick="resetBoard()">Reset board</li>
-            <li id="toggleDetails" class="pure-button av-item" onclick="toggleDetails()">Show details</li>
+            <li id="toggleDetails" class="pure-button av-item " onclick="toggleDetails()">Show details</li>
         </ul>
     </nav>
 
@@ -37,8 +37,8 @@
 
     </div>
 
-    <div class='row'>
-        <div class='column center'>
+    <div class='row pt-2'>
+        <div class='column align-right p-r-1'>
 
                 <div id="myBoard" class="p-1">
                 </div>
@@ -46,7 +46,7 @@
 
         </div>
 
-        <div class='column center'>
+        <div class='column p-l-1 align-left'>
                 <div id="meet" class="meeting p-1"></div>
         </div>
     </div>
@@ -191,6 +191,7 @@
 
         var moveColor = 'White'
         var lastMoveColor = 'Black'
+
         if (game.turn() === 'b') {
             moveColor = 'Black'
             lastMoveColor = 'White'
