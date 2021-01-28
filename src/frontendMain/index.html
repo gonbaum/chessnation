@@ -7,24 +7,37 @@
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
           integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Castoro|Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="/static/main.css"/>
 </head>
 <style type="text/css">
     .l-box {
         padding: 1em;
     }
+
 </style>
 <body>
-<div id="mainDiv" class="l-box">
-    <h1>Chess Nation Play</h1>
-    <h2>connecting people through chess</h2>
-    <div>
-        <h4>Enter an existing room name or create a new one (minimum 12 characters) and share it with your opponent:</h4>
-        <input id="roomNameInput" type="text" placeholder="Room name" required=""/>
-        <button id="joinButton" class="pure-button pure-button-primary" onclick="join()" disabled="">
-            Join
-        </button>
+<div id="mainDiv" class="l-box" style="margin-bottom: 5rem;">
+    <img id="logo" src="static/greychess.png">
+    <div class="greychess">
+        <h1 id="chessnation">Chess Nation Play</h1>
+        <h2>connecting people through chess</h2>
+        <div>
+            <h4>Enter an existing room name or create a new one (minimum 12 characters) and share it with your opponent:</h4>
+            <div class="enter-room">
+                <input id="roomNameInput" type="text" placeholder="Room name" required="" style="height:2rem;"/>
+                <button id="joinButton" class="pure-button pure-button-primary" onclick="join()" disabled="" style="height:2rem;">
+                    Join
+                </button>
+            </div>
+        </div>
     </div>
 </div>
+<footer>
+    <div class="social">
+        © Chess Nation 2020
+    </div>
+</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script>
     let $roomNameInput = $('#roomNameInput');

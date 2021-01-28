@@ -42,6 +42,8 @@ fun Application.module() {
     install(Routing) {
         static("static") {
             files("$sourcesPath/resources/pieces")
+            files("$sourcesPath/resources/style")
+            files("$sourcesPath/resources/img")
         }
         webSocket("/ws/{roomName}") {
             val roomName = call.parameters["roomName"]!!
