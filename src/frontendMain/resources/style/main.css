@@ -1,0 +1,357 @@
+/*html*/
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body, html {
+	background-color: #D9D9D9;
+	color: #373737;
+	width: 100%;
+
+}
+
+footer {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.p-1 {
+    padding: 1rem;
+}
+.pt-1 {
+    padding-top: 1rem;
+}
+
+.pt-2 {
+    padding-top: 2rem;
+}
+
+.p-2 {
+    padding: 2rem;
+}
+
+.p-l-1 {
+    padding-left: 1rem;
+}
+
+.p-r-1 {
+    padding-right: 1rem;
+}
+
+.pl-m-4 {
+    padding-left: 8%;
+}
+
+p {
+	font-family: Castoro;
+	letter-spacing: .8px;
+	font-size: 1em;
+    text-align: center;
+}
+
+h1 {
+	text-align: center;
+	font-family: Roboto;
+	font-size: 3em;
+	letter-spacing: .8px;
+	padding-top: 140px;
+  padding-bottom: 40px;
+}
+
+h2 {
+	text-align: center;
+  font-family: Roboto;
+	letter-spacing: .8px;
+	font-size: 1.8em;
+}
+
+h4 {
+  font-family: Roboto;
+  margin-bottom: 0;
+}
+
+
+a {
+  font-family: Castoro !important;
+  font-size: 1em !important;
+}
+
+#logo {
+  width: 10em;
+  margin-left: 20px;
+  transition: all ease-in-out .2s;
+}
+
+#logo:hover {
+    transform: scale(1.05, 1.05);
+
+}
+
+/*home*/
+#home {
+	background-color: #D9D9D9;
+	margin-top: 50px;
+  padding-bottom: 10em;
+
+}
+
+.greychess {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+
+@media screen and (max-width: 619px) {
+  #greychess {
+    width: 100%;
+  }
+}
+
+#chessnation {
+  padding-top: 2rem;
+  margin-bottom: -2rem;
+}
+
+.enter-room {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+
+/*board*/
+/*
+.board {
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+ }*/
+
+
+
+.meeting {
+
+}
+
+ /* Pattern styles */
+ .container {
+
+   display: flex;
+   height: 100vh;
+   flex-wrap: wrap;
+   justify-content: space-between;
+ }
+
+#colorSelection {
+       display: flex;
+       justify-content:center;
+       align-items: start;
+       text-align: center;
+       flex-direction: row;
+
+ }
+
+ #myBoard {
+
+ width: 40rem;
+ }
+
+.board-b72b1 {
+    border: none !important;
+}
+
+ #meet {
+ width: 40rem; height: 40rem;
+ }
+
+#meet iframe {
+   border-radius: 2px;
+}
+
+
+ #gameDetails {
+ display:none;
+    width: 40rem;
+ }
+
+  #buttons {
+      display: flex;
+      justify-content: flex-start;
+      align-self: flex-start;
+  }
+
+.pure-button {
+  margin: .5rem;
+  border-radius: 2px;
+  background-color: white;
+}
+
+#joinButton {
+   color: black;
+}
+
+ #logoChannel {
+position:absolute;
+left:0;
+top:0;
+ }
+
+
+
+/* Layout classes */
+
+.center {
+    align-items: center;
+}
+
+.align-right {
+    align-items: flex-end;
+}
+
+.align-left {
+    align-items: flex-start;
+}
+
+.half {
+    width: 50%;
+}
+
+.some-page-wrapper {
+  margin: 5px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  width: 100%;
+}
+
+.row-2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  width: 50%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+  word-break: break-all;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+      padding-inline-start: 0.5rem;
+
+}
+
+/*media*/
+
+
+
+@media only screen and (max-width: 1300px) {
+
+     #myBoard {
+           width: 30rem;
+           height: 30rem;
+    }
+     #meet {
+           width: 30rem;
+           height: 30rem;
+
+     }
+          #gameDetails {
+                 padding-left: 6%;
+          }
+
+}
+
+@media only screen and (max-width: 960px) {
+
+     #myBoard {
+           width: 20rem;
+           height: 20rem;
+    }
+     #meet {
+           width: 20rem;
+           height: 20rem;
+     }
+          #gameDetails {
+                 padding-left: 5%;
+                 line-break: auto;
+
+          }
+     .row-2 {
+        width: 90%;
+     }
+}
+
+@media only screen and (max-width: 645px) {
+
+     #myBoard {
+           width: 15rem;
+           height: 15rem;
+    }
+     #meet {
+           width: 15rem;
+           height: 15rem;
+     }
+          #gameDetails {
+                 margin: 10px;
+                 padding-left: 2%;
+                 line-break: auto;
+          }
+     .p-r-1 {
+         padding-right: 0 !important;
+     }
+     .p-l-1 {
+         padding-left: 0 !important;
+     }
+}
+
+/*
+@media screen and (max-width: 1000px) {
+    .pl-m-4 {
+     padding-left: 1rem;
+
+    {
+}
+
+@media screen and (max-width: 700px) {
+    .pl-m-4 {
+     padding-left: 1rem;
+    {
+}
+/*
+
+@media only screen and (orientation:portrait){
+  body {
+    height: 100vw;
+    transform: rotate(90deg);
+  }
+*/
+
+
+
+
+
+
