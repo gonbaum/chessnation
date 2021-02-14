@@ -35,4 +35,21 @@ class BoardHandlerTests {
         val boardHandler = BoardHandler()
         assertFalse(boardHandler.updateBoard("e7e5"))
     }
+
+    @Test
+    fun `returns empty captured pieces`() {
+        val boardHandler = BoardHandler()
+        boardHandler.updateBoard("e2e4")
+        assertEquals("", boardHandler.getCapturedPieces())
+    }
+
+    @Test
+    fun `returns taken pawns in Scandinavian`() {
+        val boardHandler = BoardHandler()
+        boardHandler.updateBoard("e2e4")
+        boardHandler.updateBoard("d7d5")
+        boardHandler.updateBoard("e4d5")
+        boardHandler.updateBoard("d8d5")
+        assertEquals("Pp", boardHandler.getCapturedPieces())
+    }
 }

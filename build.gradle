@@ -27,6 +27,7 @@ dependencies {
     implementation "io.ktor:ktor-websockets:$ktor_version"
     implementation "ch.qos.logback:logback-classic:$logback_version"
     implementation "com.github.bhlangonijr:chesslib:$chesslib_version"
+    implementation 'org.bitbucket.cowwoc:diff-match-patch:1.2'
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"

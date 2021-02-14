@@ -26,7 +26,10 @@ class RoomsHandler {
         forRoom(name) {
             removeDisconnectedPlayers()
             if (it.board.updateBoard(position))
-                it.players.forEach { player -> player.notify(position) }
+                it.players.forEach { player ->
+                    player.notify(position)
+                    player.notify("captured|${it.board.getCapturedPieces()}")
+                }
         }
 
         printStatus()
