@@ -5,6 +5,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 body, html {
 	background-color: #D9D9D9;
 	color: #373737;
@@ -125,24 +126,6 @@ a {
     margin-top: 1rem;
 }
 
-
-/*board*/
-/*
-.board {
-  display: flex;
-  flex-direction: row;
-  justify-content:center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
- }*/
-
-
-
-.meeting {
-
-}
-
  /* Pattern styles */
  .container {
 
@@ -161,8 +144,11 @@ a {
 
  }
 
- #myBoard {
+ #gameDetails {
+  display:none;
+ }
 
+ #myBoard {
  width: 40rem;
  }
 
@@ -171,17 +157,31 @@ a {
 }
 
  #meet {
- width: 40rem; height: 40rem;
+ width: 40rem; 
+ height: 40rem;
  }
 
 #meet iframe {
    border-radius: 2px;
 }
 
+ #consoleContainer {
+  height: 15vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+ }
 
- #gameDetails {
- display:none;
-    width: 40rem;
+ #detailsConsole {
+  margin: 0px;
+  width: 80rem;
+  background: black;
+  color: white;
+  font-family: monospace;
+  padding: 1rem;
+  border: solid 1px lightgoldenrodyellow;
+  border-radius: 3px;
+  resize: none; 
  }
 
   #buttons {
@@ -204,9 +204,7 @@ a {
 position:absolute;
 left:0;
 top:0;
- }
-
-
+}
 
 /* Layout classes */
 
@@ -264,7 +262,78 @@ top:0;
 
 }
 
-/*media*/
+/* Captured pieces */
+
+#capturedPieces {
+  width:640px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#capturedPieces div {
+  width: 75px;
+}
+
+div.p {
+  content:url("./bP.png");
+}
+
+div.P {
+  content:url("./wP.png");
+}
+
+div.K {
+  content:url("./wK.png");
+}
+
+div.k {
+  content:url("./bK.png");
+}
+
+div.N {
+  content:url("./wN.png");
+}
+
+div.n {
+  content:url("./bN.png");
+}
+
+div.Q {
+  content:url("./wQ.png");
+}
+
+div.q {
+  content:url("./bQ.png");
+}
+
+div.K {
+  content:url("./wK.png");
+}
+
+div.k {
+  content:url("./bK.png");
+}
+
+div.R {
+  content:url("./wR.png");
+}
+
+div.r {
+  content:url("./bR.png");
+}
+
+div.B {
+  content:url("./wB.png");
+}
+
+div.b {
+  content:url("./bB.png");
+}
+
+
+
+
 
 
 
@@ -274,14 +343,23 @@ top:0;
            width: 30rem;
            height: 30rem;
     }
+
+    #capturedPieces {
+      width:30rem;
+    }
+    
+    #capturedPieces div {
+      width: 55px;
+    }
+    #detailsConsole {
+      width: 60rem;
+    }
+
      #meet {
            width: 30rem;
            height: 30rem;
 
      }
-          #gameDetails {
-                 padding-left: 6%;
-          }
 
 }
 
@@ -291,15 +369,23 @@ top:0;
            width: 20rem;
            height: 20rem;
     }
+
+    #capturedPieces {
+      width:20rem;
+    }
+
+    #detailsConsole {
+      width: 40rem;
+    }
+    
+    #capturedPieces div {
+      width: 35px;
+    }
      #meet {
            width: 20rem;
            height: 20rem;
      }
-          #gameDetails {
-                 padding-left: 5%;
-                 line-break: auto;
 
-          }
      .row-2 {
         width: 90%;
      }
@@ -311,15 +397,24 @@ top:0;
            width: 15rem;
            height: 15rem;
     }
+
+    #capturedPieces {
+      width:15rem;
+    }
+    
+    #capturedPieces div {
+      width: 25px;
+    }
+
+    #detailsConsole {
+      width: 30rem;
+    }
+
      #meet {
            width: 15rem;
            height: 15rem;
      }
-          #gameDetails {
-                 margin: 10px;
-                 padding-left: 2%;
-                 line-break: auto;
-          }
+
      .p-r-1 {
          padding-right: 0 !important;
      }

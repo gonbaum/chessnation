@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html> 
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -42,7 +42,7 @@
 
                 <div id="myBoard" class="p-1">
                 </div>
-
+                <div id="capturedPieces"></div>
 
         </div>
 
@@ -70,9 +70,12 @@
 
         </div>
     </div>
-    <div class="row">
+    <div id="gameDetails" class="row">
+        <div id="consoleContainer" class="p-1">
+            <textarea id="detailsConsole" disabled>Status: asdasdas  </textarea>
+        </div>
 
-        <div id="gameDetails" class="pl-m-4 pt-1">
+        <!-- <div id="gameDetails" class="pl-m-4 pt-1"> 
 
             <div class="row">
                 <div class="column half">
@@ -99,7 +102,7 @@
                 </div>
             </div>
         </div>
-
+        -->
 
     </div>
 </div>
@@ -119,23 +122,28 @@
 <script src='https://meet.jit.si/external_api.js'></script>
 <script>
 
-    var board = null;
-    var game = new Chess();
-    var $status = $('#status')
-    var $fen = $('#fen');
-    var $pgn = $('#pgn');
+    let board = null;
+    let game = new Chess();
 
     // Store last event in $move (Gonzalo)
     var $move = $('#move');
 
     // Store if a color has been chosen (Gonzalo)
-    var $colorChosen = false;
+    let colorChosen = false;
 
-    var $boardUi = $('#myBoard');
+    let $boardUi = $('#myBoard');
     let myColor;
+
     const roomName = location.pathname.match(/\/room\/(.*)/)[1];
+
     let detailsHidden = true;
+
+    let $status = $('#status')
+    let $fen = $('#fen');
+    let $pgn = $('#pgn');
     let $details = $('#gameDetails');
+    let $detailsConsole = $('#detailsConsole')
+    let $capturedPieces = $('#capturedPieces')
     let $toggleDetailsButton = $('#toggleDetails');
 
     function onDragStart(source, piece, position, orientation) {
@@ -143,7 +151,7 @@
             return false;
 
         // If player hasn't chose a color, disable any move. (Gonzalo)
-        if ($colorChosen === false)
+        if (colorChosen === false)
             return false;
 
         // only pick up pieces for the side to move
@@ -192,11 +200,21 @@
     }
 
     function updateStatus(movement) {
-        var status = ''
+        let status = ''
+        let colorPlayer = myColor == 'w' ? 'White' : 'Black'
+        let moveColor = 'White'
+        let lastMoveColor = 'Black'
+        let fenMessage = game.fen()
+        let pgnMessage = game.pgn()
+        
+        // Has player choosen color ?
+        if (colorChosen == false) {
+            status = 'You need to choose colors'
+            fenMessage = ''
+            pgnMessage = ''
+        }
 
-        var moveColor = 'White'
-        var lastMoveColor = 'Black'
-
+        // who's turn?
         if (game.turn() === 'b') {
             moveColor = 'Black'
             lastMoveColor = 'White'
@@ -213,8 +231,8 @@
         }
 
         // game still on
-        else {
-            status = 'You play ' + myColor + ', ' + moveColor + ' to move'
+        else if (colorChosen) {
+            status = 'You play with ' + colorPlayer + ', ' + moveColor + ' to move'
 
             // check?
             if (game.in_check()) {
@@ -223,14 +241,21 @@
         }
 
         $status.html(status)
-        $fen.html(game.fen())
-        $pgn.html(game.pgn())
+        $fen.html(fenMessage)
+        $pgn.html(pgnMessage)
 
         // Update also 'move' label with last event info (Gonzalo):
         if (movement && movement.length < 5) {
          $move.html(`${movement} (${lastMoveColor})`)
          console.log(movement.length)
         }
+
+        //prepare text for console:
+        let text = 
+        `Status: ${status}\n` +
+        `PGN: ${pgnMessage}\n`+
+        `Fen: ${fenMessage}\n` 
+        $detailsConsole.html(text)
     }
 
     function setupVideo() {
@@ -257,7 +282,7 @@
 
     function selectWhite() {
         myColor = 'w';
-        $colorChosen = true;
+        colorChosen = true;
         sessionStorage.setItem("color", "white");
         updateStatus();
         board.orientation('white');
@@ -267,7 +292,7 @@
 
     function selectBlack() {
         myColor = 'b';
-        $colorChosen = true;
+        colorChosen = true;
         sessionStorage.setItem("color", "black");
         updateStatus();
         board.orientation('black');
@@ -278,15 +303,14 @@
     function resetBoard() {
         socket.send("reset");
         $('#colorSelection').show();
-        $colorChosen = false;
+        colorChosen = false;
         sessionStorage.setItem("color", null);
 
         // clear highlight move when board is reset (Gonzalo)
         const squareClass = 'square-55d63';
         $boardUi.find('.' + squareClass).removeClass('highlight')
-
-
-
+        $capturedPieces.empty()
+        $detailsConsole.html('')
     }
 
     function toggleDetails() {
@@ -301,6 +325,16 @@
         }
     }
 
+    function displayCapturedPieces(captured) {
+        $(".capturedPiece").remove();
+        for (let c in captured) {
+            const newElement = document.createElement('div');
+            newElement.className = `capturedPiece ${captured[c]}`;
+            newElement.innerHTML = captured[c]
+            capturedPieces.append(newElement);
+        }
+    }
+
     function handleNewMove(event) {
         const received = event.data;
         console.log("Received: " + received)
@@ -309,8 +343,9 @@
             const fen = received.split("|")[1];
             game.load(fen);
         } else if (received.startsWith("captured")) {
-            const captured = received.split("|")[1];
+            const captured = received.split("|")[1].split("");
             console.log("Captured pieces: " + captured);
+            displayCapturedPieces(captured);
         } else if (received === "reset") {
             let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             game.load(startingFen);
