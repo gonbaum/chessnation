@@ -308,6 +308,9 @@
         if (received.startsWith("fen")) {
             const fen = received.split("|")[1];
             game.load(fen);
+        } else if (received.startsWith("captured")) {
+            const captured = received.split("|")[1];
+            console.log("Captured pieces: " + captured);
         } else if (received === "reset") {
             let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             game.load(startingFen);

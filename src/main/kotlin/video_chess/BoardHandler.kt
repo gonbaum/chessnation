@@ -6,6 +6,7 @@ import com.github.bhlangonijr.chesslib.Side
 import com.github.bhlangonijr.chesslib.Square
 import com.github.bhlangonijr.chesslib.move.Move
 import com.github.bhlangonijr.chesslib.move.MoveGenerator
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch
 
 class BoardHandler {
     private var board = Board()
@@ -40,5 +41,19 @@ class BoardHandler {
 
     fun resetBoard() {
         board = Board()
+    }
+
+    private val allPieces = "BBKNNPPPPPPPPQRRbbknnppppppppqrr"
+
+    fun getCapturedPieces(): String {
+        val boardPieces = board.fen.substringBefore(" ")
+                .toList()
+                .filterNot { listOf('/', '1', '2', '3', '4', '5', '6', '7', '8').contains(it) }
+                .sorted()
+                .joinToString("")
+
+        return DiffMatchPatch().diffMain(allPieces, boardPieces)
+                .filter { it.operation == DiffMatchPatch.Operation.DELETE }
+                .joinToString("") { it.text }
     }
 }
