@@ -64,7 +64,7 @@
                     <div><img src="static/wK.png" border="0" onclick="selectWhite()"/></div>
                 </div>
                 <div>
-                    <div><button class="material-button" onclick="selectBlack()">Black</button></div>
+                    <div><button class="material-button " onclick="selectBlack()">Black</button></div>
                     <div><img src="static/bK.png" border="0" onclick="selectBlack()"/></div>
                 </div>
             </table>
@@ -284,28 +284,34 @@
     function selectWhite() {
         myColor = 'w';
         colorChosen = true;
-        sessionStorage.setItem("color", "white");
+        sessionStorage.setItem("isColorChosen", true);
         updateStatus();
         board.orientation('white');
         $boardUi.show();
-        $('#colorSelection').hide();
+        $('#colorSelection').addClass('hidden-details');
+            setTimeout(()=>{
+            $('#colorSelection').hide()}, 500)
     }
 
     function selectBlack() {
         myColor = 'b';
         colorChosen = true;
-        sessionStorage.setItem("color", "black");
+        sessionStorage.setItem("isColorChosen", true);
         updateStatus();
         board.orientation('black');
         $boardUi.show();
-        $('#colorSelection').hide();
+        $('#colorSelection').addClass('hidden-details');
+            setTimeout(()=>{
+            $('#colorSelection').hide()}, 500)
+        
     }
 
     function resetBoard() {
         socket.send("reset");
+        $('#colorSelection').removeClass('hidden-details');
         $('#colorSelection').show();
         colorChosen = false;
-        sessionStorage.setItem("color", null);
+        sessionStorage.clear();
 
         // clear highlight move when board is reset (Gonzalo)
         const squareClass = 'square-55d63';
@@ -317,11 +323,14 @@
     function toggleDetails() {
         if (detailsHidden) {
             detailsHidden = false;
+            $details.removeClass('hidden-details');
             $details.show();
             $toggleDetailsButton.html("Hide details");
         } else {
             detailsHidden = true;
-            $details.hide();
+            $details.addClass('hidden-details');
+            setTimeout(()=>{
+            $details.hide();}, 500)
             $toggleDetailsButton.html("Show details");
         }
     }

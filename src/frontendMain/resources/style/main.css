@@ -75,6 +75,7 @@ h4 {
 }
 
 .material-button {
+  animation: 1s ease-out 0s 1 slideInFromRight;
   padding: 1rem 1rem;
   font-family: "Roboto", sans-serif;
   position: relative;
@@ -169,6 +170,12 @@ a {
 
  }
 
+ .hidden-details {
+  transition: opacity 0.5s ease-in; 
+  opacity: 0;
+}
+
+
  @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);
@@ -187,15 +194,24 @@ a {
   }
 }
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0.0;
+  }
+  100% {
+    opacity: 1.0;
+  }
+}
+
  #gameDetails {
   animation: 0.5s ease-out 0s 1 slideInFromRight;
   display:none;
  }
 
  #myBoard {
-  animation: 1s ease-out 0s 1 slideInFromLeft;
-   width: 640px;
- height: 640px;
+  animation: 1s ease-out 0s 1 fadeIn;
+  width: 640px;
+  height: 640px;
  }
 
 .board-b72b1 {
@@ -208,7 +224,7 @@ a {
  }
 
 #meet iframe {
-  animation: 1s ease-out 0s 1 slideInFromRight;
+  animation: 0.5s ease-out 0s 1 fadeIn;
    background-color: rgb(27, 38, 56);
    border-radius: 3px;
 }
@@ -245,7 +261,9 @@ a {
 }
 
 #joinButton {
-   color: black;
+   /*color: black;*/
+   display: flex;
+   align-items: center;
 }
 
  #logoChannel {
@@ -313,11 +331,16 @@ top:0;
 /* Captured pieces */
 
 #capturedPieces {
+  
   width:640px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+/*#capturedPieces div:last-child {
+  animation: 1s ease-out 0s 1 fadeIn; 
+}*/
 
 #capturedPieces div {
   width: 75px;
