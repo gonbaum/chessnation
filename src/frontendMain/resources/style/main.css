@@ -10,7 +10,8 @@ body, html {
 	background-color: #D9D9D9;
 	color: #373737;
 	width: 100%;
-
+  overflow-x: hidden;
+  font-family: Roboto;
 }
 
 footer {
@@ -46,7 +47,7 @@ footer {
 }
 
 p {
-	font-family: Castoro;
+	font-family: Roboto;
 	letter-spacing: .8px;
 	font-size: 1em;
     text-align: center;
@@ -73,9 +74,33 @@ h4 {
   margin-bottom: 0;
 }
 
+.material-button {
+  padding: 1rem 1rem;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  user-select: none;
+  color: #fff;
+  background:  rgb(27, 38, 56);
+  border: 0;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.3);
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.material-button:hover {
+  box-shadow: 0px 6px 8px -3px rgba(0,0,0,0.3);
+  transform: translateY(-5px);
+}
+.material-button:focus{
+  outline: none;
+}
 
 a {
-  font-family: Castoro !important;
+  font-family: Roboto !important;
   font-size: 1em !important;
 }
 
@@ -144,12 +169,33 @@ a {
 
  }
 
+ @keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(+100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
  #gameDetails {
+  animation: 0.5s ease-out 0s 1 slideInFromRight;
   display:none;
  }
 
  #myBoard {
- width: 40rem;
+  animation: 1s ease-out 0s 1 slideInFromLeft;
+   width: 640px;
+ height: 640px;
  }
 
 .board-b72b1 {
@@ -162,7 +208,9 @@ a {
  }
 
 #meet iframe {
-   border-radius: 2px;
+  animation: 1s ease-out 0s 1 slideInFromRight;
+   background-color: rgb(27, 38, 56);
+   border-radius: 3px;
 }
 
  #consoleContainer {

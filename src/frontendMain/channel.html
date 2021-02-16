@@ -7,7 +7,8 @@
     <base href="../"/>
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css"
           integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/grids-responsive-min.css"/>
+
+
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
           integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,8 +29,8 @@
         </div>
 
         <ul class="nav-links">
-            <li class="pure-button av-item" onclick="resetBoard()">Reset board</li>
-            <li id="toggleDetails" class="pure-button av-item " onclick="toggleDetails()">Show details</li>
+            <li class="material-button" onclick="resetBoard()">Reset board</li>
+            <li id="toggleDetails" class="material-button" onclick="toggleDetails()">Show details</li>
         </ul>
     </nav>
 
@@ -59,11 +60,11 @@
             </div>
             <table class="">
                 <div>
-                    <div><button class="pure-button" onclick="selectWhite()">White</button></div>
+                    <div><button class="material-button" onclick="selectWhite()">White</button></div>
                     <div><img src="static/wK.png" border="0" onclick="selectWhite()"/></div>
                 </div>
                 <div>
-                    <div><button class="pure-button" onclick="selectBlack()">Black</button></div>
+                    <div><button class="material-button" onclick="selectBlack()">Black</button></div>
                     <div><img src="static/bK.png" border="0" onclick="selectBlack()"/></div>
                 </div>
             </table>
