@@ -29,7 +29,7 @@
         </div>
 
         <ul class="nav-links">
-            <li class="material-button" onclick="resetBoard()">Reset board</li>
+            <li class="material-button" onclick="handleResetClick()">Reset board</li>
             <li id="toggleDetails" class="material-button" onclick="toggleDetails()">Show details</li>
         </ul>
     </nav>
@@ -60,12 +60,12 @@
             </div>
             <table class="">
                 <div>
-                    <div><button class="material-button" onclick="selectWhite()">White</button></div>
-                    <div><img src="static/wK.png" border="0" onclick="selectWhite()"/></div>
+                    <div><button class="material-button" onclick="selectColor('white')">White</button></div>
+                    <div><img src="static/wK.png" border="0" onclick="selectColor('white')"/></div>
                 </div>
                 <div>
-                    <div><button class="material-button " onclick="selectBlack()">Black</button></div>
-                    <div><img src="static/bK.png" border="0" onclick="selectBlack()"/></div>
+                    <div><button class="material-button " onclick="selectColor('black')">Black</button></div>
+                    <div><img src="static/bK.png" border="0" onclick="selectColor('black')"/></div>
                 </div>
             </table>
 
@@ -280,44 +280,41 @@
             console.log('VC Camera error ' + event)
         });
     }
+    
 
-    function selectWhite() {
-        myColor = 'w';
-        colorChosen = true;
-        sessionStorage.setItem("isColorChosen", true);
-        updateStatus();
-        board.orientation('white');
-        $boardUi.show();
-        $('#colorSelection').addClass('hidden-details');
+    function selectColor(color) {
+        myColor = color === 'white' ? 'w' : 'black'
+        colorChosen = true
+        sessionStorage.setItem("isColorChosen", true)
+        sessionStorage.setItem("playerColor", color)
+        updateStatus()
+        board.orientation(color)
+        $boardUi.show()
+        $('#colorSelection').addClass('hidden-details')
             setTimeout(()=>{
             $('#colorSelection').hide()}, 500)
     }
 
-    function selectBlack() {
-        myColor = 'b';
-        colorChosen = true;
-        sessionStorage.setItem("isColorChosen", true);
-        updateStatus();
-        board.orientation('black');
-        $boardUi.show();
-        $('#colorSelection').addClass('hidden-details');
-            setTimeout(()=>{
-            $('#colorSelection').hide()}, 500)
-        
+    function handleResetClick() {
+        socket.send("reset")
+        resetBoard()
+        resetColorSelection()
     }
-
     function resetBoard() {
-        socket.send("reset");
-        $('#colorSelection').removeClass('hidden-details');
-        $('#colorSelection').show();
-        colorChosen = false;
-        sessionStorage.clear();
-
+        let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        game.load(startingFen);
         // clear highlight move when board is reset (Gonzalo)
         const squareClass = 'square-55d63';
         $boardUi.find('.' + squareClass).removeClass('highlight')
         $capturedPieces.empty()
         $detailsConsole.html('')
+    }
+
+    function resetColorSelection() {
+        $('#colorSelection').removeClass('hidden-details');
+        $('#colorSelection').show();
+        colorChosen = false;
+        sessionStorage.clear();
     }
 
     function toggleDetails() {
@@ -357,9 +354,8 @@
             console.log("Captured pieces: " + captured);
             displayCapturedPieces(captured);
         } else if (received === "reset") {
-            let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-            game.load(startingFen);
-            $('#colorSelection').show();
+            resetBoard()
+            resetColorSelection()
         } else {
             const source = received.substring(0, 2);
             const target = received.substring(2, 4);
