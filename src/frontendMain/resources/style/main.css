@@ -19,6 +19,10 @@ footer {
     text-align: center;
 }
 
+.hide {
+  display: none !important;
+}
+
 .p-1 {
     padding: 1rem;
 }
@@ -167,7 +171,6 @@ a {
        align-items: start;
        text-align: center;
        flex-direction: row;
-
  }
 
  .hidden-details {

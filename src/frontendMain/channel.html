@@ -52,13 +52,13 @@
         </div>
     </div>
     <div class="row-2">
-        <div id="colorSelection" class="column p-1" >
+        <div id="colorSelection" class="column p-1 ">
             <div>
                 <h3>
                     Select your side:
                 </h3>
             </div>
-            <table class="">
+            <table id="colorOptions">
                 <div>
                     <div><button class="material-button" onclick="selectColor('white')">White</button></div>
                     <div><img src="static/wK.png" border="0" onclick="selectColor('white')"/></div>
@@ -126,14 +126,38 @@
     let board = null;
     let game = new Chess();
 
+    const config = {
+        draggable: true,
+        moveSpeed: 'slow',
+        snapbackSpeed: 500,
+        position: 'start',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd,
+        pieceTheme: 'static/{piece}.png'
+    }
+
+    board = Chessboard('myBoard', config);
+    $(window).resize(board.resize);
+
     // Store last event in $move (Gonzalo)
     var $move = $('#move');
 
     // Store if a color has been chosen (Gonzalo)
-    let colorChosen = false;
+    let myColor
+    let colorChosen
+
+    if (sessionStorage.getItem('playerColor')) {
+        $('#colorSelection').hide()
+        colorChosen = true
+        myColor = sessionStorage.getItem('playerColor')
+        board.orientation(myColor)
+    } else { 
+        colorChosen = false 
+    }
 
     let $boardUi = $('#myBoard');
-    let myColor;
+    
 
     const roomName = location.pathname.match(/\/room\/(.*)/)[1];
 
@@ -148,7 +172,8 @@
     let $toggleDetailsButton = $('#toggleDetails');
 
     function onDragStart(source, piece, position, orientation) {
-        if (game.turn() !== myColor || game.game_over())
+        let turnColor = myColor == 'white' ? 'w' : 'b'
+        if (game.turn() !== turnColor || game.game_over())
             return false;
 
         // If player hasn't chose a color, disable any move. (Gonzalo)
@@ -202,7 +227,7 @@
 
     function updateStatus(movement) {
         let status = ''
-        let colorPlayer = myColor == 'w' ? 'White' : 'Black'
+        let colorPlayer = myColor
         let moveColor = 'White'
         let lastMoveColor = 'Black'
         let fenMessage = game.fen()
@@ -233,7 +258,7 @@
 
         // game still on
         else if (colorChosen) {
-            status = 'You play with ' + colorPlayer + ', ' + moveColor + ' to move'
+            status = 'You play with ' + colorPlayer + '. ' + moveColor + ' to move'
 
             // check?
             if (game.in_check()) {
@@ -283,7 +308,8 @@
     
 
     function selectColor(color) {
-        myColor = color === 'white' ? 'w' : 'black'
+        if (color === undefined) { return }
+        myColor = color
         colorChosen = true
         sessionStorage.setItem("isColorChosen", true)
         sessionStorage.setItem("playerColor", color)
@@ -300,6 +326,7 @@
         resetBoard()
         resetColorSelection()
     }
+
     function resetBoard() {
         let startingFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         game.load(startingFen);
@@ -315,6 +342,7 @@
         $('#colorSelection').show();
         colorChosen = false;
         sessionStorage.clear();
+        $('#colorSelection').show()
     }
 
     function toggleDetails() {
@@ -393,19 +421,7 @@
         }
     }
 
-    const config = {
-        draggable: true,
-        moveSpeed: 'slow',
-        snapbackSpeed: 500,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onSnapEnd: onSnapEnd,
-        pieceTheme: 'static/{piece}.png'
-    }
-
-    board = Chessboard('myBoard', config);
-    $(window).resize(board.resize);
+    
 
     updateStatus();
 
