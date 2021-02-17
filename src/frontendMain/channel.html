@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
           integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <link rel="stylesheet" href="/static/main.css"/>
 </head>
 <style type="text/css">
@@ -25,7 +25,11 @@
 <div id="mainDiv" class="some-page-wrapper">
     <nav class="navbar">
         <div class="logo">
-            <img id="logo" class="p-1" src="static/greychess.png">
+            <picture>
+                <source srcset="static/logodark.png" media="(prefers-color-scheme: dark)">
+                    <img id="logo" class="p-1" src="static/logo.png">
+            </picture>
+            
         </div>
 
         <ul class="nav-links">
@@ -34,12 +38,9 @@
         </ul>
     </nav>
 
-    <div class="row" style="width: 50%;">
 
-    </div>
-
-    <div class='row pt-2'>
-        <div class='column align-right p-r-1'>
+    <div class='sm-row'>
+        <div class='column sm-align-right p-r-1'>
 
                 <div id="myBoard" class="p-1">
                 </div>
@@ -47,7 +48,7 @@
 
         </div>
 
-        <div class='column p-l-1 align-left'>
+        <div class='column p-l-1 sm-align-left'>
                 <div id="meet" class="meeting p-1"></div>
         </div>
     </div>
@@ -106,12 +107,13 @@
         -->
 
     </div>
+    <footer>
+        <div class="social">
+            © Chess Nation 2020 ♟ 
+        </div>
+    </footer>
 </div>
-<footer>
-    <div class="social">
-        © Chess Nation 2020
-    </div>
-</footer>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
@@ -420,8 +422,6 @@
             }
         }
     }
-
-    
 
     updateStatus();
 
