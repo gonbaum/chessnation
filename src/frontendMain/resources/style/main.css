@@ -42,6 +42,10 @@ footer {
   text-align: center;
 }
 
+.highlight { /* used for highlighting last move */
+  box-shadow: inset 0 0 3px 3px rgb(27, 38, 56)
+}
+
 .hide {
   display: none !important;
 }
@@ -640,6 +644,7 @@ div.b {
   }
 
 }
+
 /*
 @media screen and (max-width: 1000px) {
     .pl-m-4 {
